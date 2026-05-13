@@ -97,16 +97,12 @@ namespace TMPro.EditorUtilities
                         uint unicode = GetUnicodeCharacter(firstCharacter);
 
                         // Lookup glyph index
-                        TMP_FontAsset fontAsset = property.serializedObject.targetObject as TMP_FontAsset;
-                        if (fontAsset != null && fontAsset.characterLookupTable != null && fontAsset.characterLookupTable.TryGetValue(unicode, out var character))
+                        TMP_SerializedPropertyHolder propertyHolder = property.serializedObject.targetObject as TMP_SerializedPropertyHolder;
+                        TMP_FontAsset fontAsset = propertyHolder.fontAsset;
+                        if (fontAsset != null)
                         {
-                            prop_FirstGlyphIndex.intValue = (int)character.glyphIndex;
-                            
-                            // Update firstCharacter property if it exists
-                            var targetObj = property.serializedObject.targetObject;
-                            var fieldInfo = targetObj.GetType().GetProperty("firstCharacter", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.IgnoreCase);
-                            if (fieldInfo != null)
-                                fieldInfo.SetValue(targetObj, unicode);
+                            prop_FirstGlyphIndex.intValue = (int)fontAsset.GetGlyphIndex(unicode);
+                            propertyHolder.firstCharacter = unicode;
                         }
                     }
                 }
@@ -187,16 +183,12 @@ namespace TMPro.EditorUtilities
                         uint unicode = GetUnicodeCharacter(secondCharacter);
 
                         // Lookup glyph index
-                        TMP_FontAsset fontAsset = property.serializedObject.targetObject as TMP_FontAsset;
-                        if (fontAsset != null && fontAsset.characterLookupTable != null && fontAsset.characterLookupTable.TryGetValue(unicode, out var character))
+                        TMP_SerializedPropertyHolder propertyHolder = property.serializedObject.targetObject as TMP_SerializedPropertyHolder;
+                        TMP_FontAsset fontAsset = propertyHolder.fontAsset;
+                        if (fontAsset != null)
                         {
-                            prop_SecondGlyphIndex.intValue = (int)character.glyphIndex;
-                            
-                            // Update secondCharacter property if it exists
-                            var targetObj = property.serializedObject.targetObject;
-                            var fieldInfo = targetObj.GetType().GetProperty("secondCharacter", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.IgnoreCase);
-                            if (fieldInfo != null)
-                                fieldInfo.SetValue(targetObj, unicode);
+                            prop_SecondGlyphIndex.intValue = (int)fontAsset.GetGlyphIndex(unicode);
+                            propertyHolder.secondCharacter = unicode;
                         }
                     }
                 }
@@ -343,16 +335,24 @@ namespace TMPro.EditorUtilities
             if (atlasTexture == null)
                 return;
 
-            Material mat = fontAsset.material;
-            
-            if (mat == null)
-                return;
-
-            // Set texture and properties for preview
-            mat.mainTexture = atlasTexture;
-            // Set gradient scale for SDF rendering mode (not bitmap mode)
-            if (((int)fontAsset.atlasRenderMode & 1) != 1)
+            Material mat;
+            if (((GlyphRasterModes)fontAsset.atlasRenderMode & GlyphRasterModes.RASTER_MODE_BITMAP) == GlyphRasterModes.RASTER_MODE_BITMAP)
             {
+                mat = TMP_FontAssetEditor.internalBitmapMaterial;
+
+                if (mat == null)
+                    return;
+
+                mat.mainTexture = atlasTexture;
+            }
+            else
+            {
+                mat = TMP_FontAssetEditor.internalSDFMaterial;
+
+                if (mat == null)
+                    return;
+
+                mat.mainTexture = atlasTexture;
                 mat.SetFloat(ShaderUtilities.ID_GradientScale, fontAsset.atlasPadding + 1);
             }
 
