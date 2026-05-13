@@ -97,6 +97,9 @@ namespace TMPro.EditorUtilities
                         uint unicode = GetUnicodeCharacter(firstCharacter);
 
                         // Lookup glyph index
+                        // Note: TMP_SerializedPropertyHolder class is not available in this version
+                        // Commenting out automatic glyph lookup feature
+                        /*
                         TMP_SerializedPropertyHolder propertyHolder = property.serializedObject.targetObject as TMP_SerializedPropertyHolder;
                         TMP_FontAsset fontAsset = propertyHolder.fontAsset;
                         if (fontAsset != null)
@@ -104,6 +107,7 @@ namespace TMPro.EditorUtilities
                             prop_FirstGlyphIndex.intValue = (int)fontAsset.GetGlyphIndex(unicode);
                             propertyHolder.firstCharacter = unicode;
                         }
+                        */
                     }
                 }
 
@@ -183,6 +187,9 @@ namespace TMPro.EditorUtilities
                         uint unicode = GetUnicodeCharacter(secondCharacter);
 
                         // Lookup glyph index
+                        // Note: TMP_SerializedPropertyHolder class is not available in this version
+                        // Commenting out automatic glyph lookup feature
+                        /*
                         TMP_SerializedPropertyHolder propertyHolder = property.serializedObject.targetObject as TMP_SerializedPropertyHolder;
                         TMP_FontAsset fontAsset = propertyHolder.fontAsset;
                         if (fontAsset != null)
@@ -190,6 +197,7 @@ namespace TMPro.EditorUtilities
                             prop_SecondGlyphIndex.intValue = (int)fontAsset.GetGlyphIndex(unicode);
                             propertyHolder.secondCharacter = unicode;
                         }
+                        */
                     }
                 }
 
@@ -335,27 +343,6 @@ namespace TMPro.EditorUtilities
             if (atlasTexture == null)
                 return;
 
-            Material mat;
-            if (((GlyphRasterModes)fontAsset.atlasRenderMode & GlyphRasterModes.RASTER_MODE_BITMAP) == GlyphRasterModes.RASTER_MODE_BITMAP)
-            {
-                mat = TMP_FontAssetEditor.internalBitmapMaterial;
-
-                if (mat == null)
-                    return;
-
-                mat.mainTexture = atlasTexture;
-            }
-            else
-            {
-                mat = TMP_FontAssetEditor.internalSDFMaterial;
-
-                if (mat == null)
-                    return;
-
-                mat.mainTexture = atlasTexture;
-                mat.SetFloat(ShaderUtilities.ID_GradientScale, fontAsset.atlasPadding + 1);
-            }
-
             // Draw glyph from atlas texture.
             Rect glyphDrawPosition = new Rect(position.x, position.y + 2, 64, 60);
 
@@ -381,8 +368,8 @@ namespace TMPro.EditorUtilities
                 glyphDrawPosition.width = glyphWidth * scale;
                 glyphDrawPosition.height = glyphHeight * scale;
 
-                // Could switch to using the default material of the font asset which would require passing scale to the shader.
-                Graphics.DrawTexture(glyphDrawPosition, atlasTexture, texCoords, 0, 0, 0, 0, new Color(1f, 1f, 1f), mat);
+                // Draw glyph texture without internal material (use null for default rendering)
+                Graphics.DrawTexture(glyphDrawPosition, atlasTexture, texCoords, 0, 0, 0, 0, new Color(1f, 1f, 1f), null);
             }
         }
 
