@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class HelicopterController : MonoBehaviour
 {
+    public HelicopterConfig Config;
+
     // Các reference được gán từ scene: âm thanh, input, Rigidbody, rotor và prefab vũ khí.
     public AudioSource HelicopterSound;
     public ControlPanel ControlPanel;
@@ -76,6 +78,11 @@ public class HelicopterController : MonoBehaviour
     private Transform poolRoot;
     public bool IsOnGround = true;
 
+    private void Awake()
+    {
+        ApplyConfig();
+    }
+
     // Đăng ký input từ ControlPanel và chuẩn bị cache/pool khi scene bắt đầu.
     void Start()
     {
@@ -126,6 +133,36 @@ public class HelicopterController : MonoBehaviour
         var upForce = 1 - Mathf.Clamp(HelicopterModel.transform.position.y / EffectiveHeight, 0, 1);
         upForce = Mathf.Lerp(0f, EngineForce, upForce) * HelicopterModel.mass;
         HelicopterModel.AddRelativeForce(Vector3.up * upForce);
+    }
+
+    private void ApplyConfig()
+    {
+        if (Config == null)
+            return;
+
+        TurnForce = Config.TurnForce;
+        ForwardForce = Config.ForwardForce;
+        ForwardTiltForce = Config.ForwardTiltForce;
+        TurnTiltForce = Config.TurnTiltForce;
+        EffectiveHeight = Config.EffectiveHeight;
+        turnTiltForcePercent = Config.TurnTiltForcePercent;
+        turnForcePercent = Config.TurnForcePercent;
+
+        BulletSpeed = Config.BulletSpeed;
+        BulletLifeTime = Config.BulletLifeTime;
+        BulletFireCooldown = Config.BulletFireCooldown;
+        BulletSpawnForwardOffset = Config.BulletSpawnForwardOffset;
+        BulletRotationOffset = Config.BulletRotationOffset;
+
+        RocketSpeed = Config.RocketSpeed;
+        RocketLifeTime = Config.RocketLifeTime;
+        RocketFireCooldown = Config.RocketFireCooldown;
+        RocketSpawnForwardOffset = Config.RocketSpawnForwardOffset;
+        RocketRotationOffset = Config.RocketRotationOffset;
+
+        BulletPoolPreload = Config.BulletPoolPreload;
+        RocketPoolPreload = Config.RocketPoolPreload;
+        ExpandPools = Config.ExpandPools;
     }
 
     // Nghiêng thân máy bay theo hướng di chuyển để tạo cảm giác bay tự nhiên hơn.

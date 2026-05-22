@@ -4689,6 +4689,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d85f6c4d4ecfa7f4fb4ee81cffb376e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Config: {fileID: 11400000, guid: e4c59d00763f4989a33076c7065f0df5, type: 2}
   HelicopterSound: {fileID: 603330062}
   ControlPanel: {fileID: 1790072214}
   HelicopterModel: {fileID: 786398103}
