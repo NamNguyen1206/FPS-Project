@@ -6,6 +6,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private EnemyStats stats;
     [SerializeField] private Transform player;
     [SerializeField] private SimpleObjectPool attackEffectPool;
+    [SerializeField] private EnemyAttackTextDisplay attackTextDisplay;
 
     private CharacterController controller;
     private SimpleHealth targetHealth;
@@ -35,6 +36,11 @@ public class EnemyController : MonoBehaviour
         if (player != null)
         {
             targetHealth = player.GetComponent<SimpleHealth>();
+        }
+
+        if (attackTextDisplay == null)
+        {
+            attackTextDisplay = GetComponentInChildren<EnemyAttackTextDisplay>(true);
         }
 
         PickPatrolTarget();
@@ -97,6 +103,12 @@ public class EnemyController : MonoBehaviour
 
     private void AttackPlayer()
     {
+        Debug.Log($"{name} attack {player.name} for {stats.AttackDamage} damage.", this);
+        if (attackTextDisplay != null)
+        {
+            attackTextDisplay.ShowAttackText($"Attack -{stats.AttackDamage:0}");
+        }
+
         if (targetHealth != null)
         {
             targetHealth.TakeDamage(stats.AttackDamage);
