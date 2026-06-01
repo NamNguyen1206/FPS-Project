@@ -16,6 +16,7 @@ public class SimpleHealth : MonoBehaviour
     {
         if (IsDead)
         {
+            Debug.Log($"{name} is already dead. Cannot take more damage.", this);
             return;
         }
 
