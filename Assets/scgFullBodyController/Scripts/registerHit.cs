@@ -19,6 +19,15 @@ namespace scgFullBodyController
 
         void OnCollisionEnter(Collision col)
         {
+            ExplosiveBarrel explosiveBarrel = col.transform.GetComponentInParent<ExplosiveBarrel>();
+
+            if (explosiveBarrel != null)
+            {
+                explosiveBarrel.TakeHit();
+                Destroy(gameObject);
+                return;
+            }
+
             //If we (the bullet) hit the col object check for Player tag
             if (col.transform.tag == "Player")
             {
