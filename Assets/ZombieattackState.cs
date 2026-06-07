@@ -1,0 +1,40 @@
+using UnityEngine;
+using UnityEngine.AI;
+
+public class ZombieattackState : StateMachineBehaviour
+{
+    Transform player;
+    NavMeshAgent navAgent;
+
+    public float stopAttackingDistance = 3f;
+
+// OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
+    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+       player = GameObject.FindGameObjectWithTag("Player").transform;
+       navAgent = animator.GetComponent<NavMeshAgent>();
+    }
+
+    // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
+    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+       LookAtPlayer();
+
+       float distanceToPlayer = Vector3.Distance(player.position, animator.transform.position);
+
+        if(distanceToPlayer > stopAttackingDistance)
+        {
+            animator.SetBool("isAttacking", false);
+        }
+    }
+
+
+
+    private void LookAtPlayer()
+    {
+        Vector3 direction = player.position - navAgent.transform.position;
+        navAgent.transform.rotation = Quaternion.LookRotation(direction);
+        var yRotation = navAgent.transform.eulerAngles.y;
+        navAgent.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+    }
+}

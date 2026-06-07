@@ -65,7 +65,7 @@ public class ExplosiveBarrel : MonoBehaviour
 
         foreach (Collider enemy in enemies)
         {
-            Enemy enemyComponent = enemy.GetComponent<Enemy>();
+            ZombieController enemyComponent = enemy.GetComponent<ZombieController>();
 
             if (enemyComponent != null)
             {
