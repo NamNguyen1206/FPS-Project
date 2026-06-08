@@ -17,6 +17,7 @@ TagManager:
   - Waypoints
   - ZombieHand
   - Armor
+  - Ground
   layers:
   - Default
   - TransparentFX

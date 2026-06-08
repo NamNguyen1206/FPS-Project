@@ -148,8 +148,7 @@ namespace scgFullBodyController
 
         public void AttackPlayer()
         {
-            //Move and shoot
-
+            //Move and shoot at the same time, used when the player has attacked us and we want to immeditaley attack back while chasing them
             Vector3 targetPostitionXZ = new Vector3(player.position.x, transform.position.y, player.position.z);
             transform.LookAt(targetPostitionXZ);
             shootPoint.LookAt(player);
