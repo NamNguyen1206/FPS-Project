@@ -8,8 +8,9 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private SimpleObjectPool attackEffectPool;
     [SerializeField] private EnemyAttackTextDisplay attackTextDisplay;
 
-    private CharacterController controller;
     private SimpleHealth targetHealth;
+    private CharacterController controller;
+    //private SimpleHealth targetHealth;
     private Vector3 patrolCenter;
     private Vector3 patrolTarget;
     private float nextAttackTime;
@@ -111,7 +112,7 @@ public class EnemyController : MonoBehaviour
 
         if (targetHealth != null)
         {
-            targetHealth.TakeDamage(stats.AttackDamage);
+            //targetHealth.TakeDamage(stats.AttackDamage);
         }
 
         if (attackEffectPool != null)

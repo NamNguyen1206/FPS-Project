@@ -17,6 +17,8 @@ namespace scgFullBodyController
         [Header("Basics")]
         public float health;
         float maxHealth;
+        public float armor;
+        float maxArmor = 100f;
         public GameObject ragdoll;
         public bool dontSpawnRagdoll;
         public float deadTime;
@@ -43,6 +45,7 @@ namespace scgFullBodyController
 
             //Set maxHealth to what our max is at start of the scene
             maxHealth = health;
+            armor = 0f;
         }
 
         void Update()
@@ -61,11 +64,13 @@ namespace scgFullBodyController
                 {
                     GameObject ui = GameObject.FindGameObjectWithTag("hud");
                     ui.GetComponent<hudController>().uiHealth.text = health.ToString();
+                    ui.GetComponent<hudController>().uiArmor.text = armor.ToString();
                 }
                 else
                 {
                     GameObject ui = GameObject.FindGameObjectWithTag("hud");
                     ui.GetComponent<hudController>().uiHealth.text = "0";
+                    ui.GetComponent<hudController>().uiArmor.text = "0";
                 }
             }
 
@@ -84,7 +89,15 @@ namespace scgFullBodyController
             //If we are a player, take damage, otherwise (AI), apply the hit animation and attack the player
             if (!isAiOrDummy)
             {
-                health -= damage;
+                if (armor > 0)
+                {
+                    armor = Mathf.Max(armor - 20f, 0f);
+                    Debug.Log($"{name} armor: {armor}");
+                }
+                else
+                {
+                    health -= damage;
+                }
 
                 if (playNoiseOnHurt)
                 {
@@ -129,6 +142,12 @@ namespace scgFullBodyController
         void regenEnumeratorStart()
         {
             StartCoroutine("regenHealth");
+        }
+
+        public void AddArmor(float amount)
+        {
+            armor = Mathf.Min(armor + amount, maxArmor);
+            Debug.Log($"{name} armor: {armor}");
         }
 
         IEnumerator regenHealth()

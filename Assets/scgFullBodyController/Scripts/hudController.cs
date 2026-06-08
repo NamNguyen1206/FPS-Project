@@ -14,6 +14,7 @@ namespace scgFullBodyController
         //Simple references to the HUD for other scripts to access and modify
         public Text uiHealth;
         public Text uiBullets;
+        public Text uiArmor;
         public GameObject crosshair;
     }
 }
