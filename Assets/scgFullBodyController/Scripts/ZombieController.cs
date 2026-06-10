@@ -3,13 +3,25 @@ using UnityEngine.AI;
 
 public class ZombieController : MonoBehaviour
 {
+    [Header("Stats")]
+    public int ZombieDamage = 20;
     [SerializeField] private int HP = 100;
+
+    [Header("References")]
     private Collider MonsterCollider;
     private Collider[] RagdollColliders;
     public ZombieHand zombieHand;
-    public int ZombieDamage = 20;
     private Animator anim;
     private NavMeshAgent navAgent;
+    
+    private void Awake()
+    {
+        MonsterCollider = GetComponent<Collider>();
+        RagdollColliders = GetComponentsInChildren<Collider>();
+        navAgent = GetComponent<NavMeshAgent>();
+        anim = GetComponentInChildren<Animator>();
+        //ActivateRagdoll(false);
+    }
 
     private void Start()
     {
@@ -30,15 +42,7 @@ public class ZombieController : MonoBehaviour
             Debug.LogWarning("ZombieHand is not assigned and could not be found in children.", this);
         }
     }
-    private void Awake()
-    {
-        //MonsterCollider = GetComponent<Collider>();
-        //RagdollColliders = GetComponentsInChildren<Collider>();
-        anim = GetComponentInChildren<Animator>();
-
-        //ActivateRagdoll(false);
-    }
-
+    
     private void TakeDamage(int damageAmount)
     {
         HP -= damageAmount;
@@ -72,17 +76,17 @@ public class ZombieController : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, 20f);// Stop Chasing Range
     }
 
-    //private void ActivateRagdoll(bool Status)
-    //{
-        //foreach (Collider col in RagdollColliders)
-        //{
-            //col.enabled = Status;
-        //}
+    // private void ActivateRagdoll(bool Status)
+    // {
+    //     foreach (Collider col in RagdollColliders)
+    //     {
+    //         col.enabled = Status;
+    //     }
 
-        //MonsterCollider.enabled = !Status;
-        //anim.enabled = !Status;
-        //GetComponent<Rigidbody>().useGravity = !Status;
-    //}
+    //     MonsterCollider.enabled = !Status;
+    //     anim.enabled = !Status;
+    //     GetComponent<Rigidbody>().useGravity = !Status;
+    // }
 
     public void KillEnemy(Vector3 ExplosionPosition)
     {

@@ -1,7 +1,4 @@
-﻿//SlapChickenGames
-//2021
-//Bullet hit registration
-
+﻿
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,7 +26,7 @@ namespace scgFullBodyController
             }
 
             //If we (the bullet) hit the col object check for Player tag
-            if (col.transform.tag == "Player")
+            if (col.transform.tag == "Enemy" || col.transform.tag == "Player")
             {
                 //If the root object we hit has a healthcontroller then apply damage
                 if (col.transform.root.gameObject.GetComponent<HealthController>())
