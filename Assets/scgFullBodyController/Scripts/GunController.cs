@@ -1,7 +1,4 @@
-﻿//SlapChickenGames
-//2021
-//Main weapon controller supporting multiple firing types
-
+﻿
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +19,7 @@ namespace scgFullBodyController
 
         public enum WeaponTypes { Rifle, Pistol };
         public enum ShootTypes { SemiAuto, FullAuto, BoltAction };
+        //public bool isActiveWeapon;
 
         [Header("WeaponType")]
         public WeaponTypes Weapon;
@@ -224,7 +222,7 @@ namespace scgFullBodyController
             anim.SetBool("Fire", firing);
             camAnim.SetBool("recoilAuto", recoilAuto);
             camAnim.SetBool("recoilSemi", recoilSemi);
-        }
+            }
 
         void cycleFire()
         {

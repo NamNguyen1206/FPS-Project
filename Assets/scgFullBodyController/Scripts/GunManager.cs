@@ -1,7 +1,4 @@
-﻿//SlapChickenGames
-//2021
-//Manager for weapon inventory and switching
-
+﻿
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +11,7 @@ namespace scgFullBodyController
         public Animator anim;
         public OffsetRotation oRot;
         public float swapTime;
+        public WeaponInventory inventory;
         int index = 0;
 
         void Start()
@@ -34,7 +32,7 @@ namespace scgFullBodyController
         {
             //To add more weapons, just copy one of these blocks of code, add an else if, and change the keybind to the next one up ex., 
             //Aplha4, then set index to the corresponding key value such as 4
-            if (Input.GetKeyDown(KeyCode.Alpha1) && index != 0)
+            if (Input.GetKeyDown(KeyCode.Alpha1) && index != 0 && inventory.hasPistol)
             {
                 if (!weapons[index].GetComponent<GunController>().firing && !weapons[index].GetComponent<GunController>().swapping
                     && !weapons[index].GetComponent<GunController>().aiming && weapons[index].GetComponent<GunController>().aimFinished
@@ -49,7 +47,7 @@ namespace scgFullBodyController
                     anim.SetBool("putaway", true);
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha2) && index != 1 && weapons.Length > 1)
+            else if (Input.GetKeyDown(KeyCode.Alpha2) && index != 1 && weapons.Length > 1 && inventory.hasRifle)
             {
                 if (!weapons[index].GetComponent<GunController>().firing && !weapons[index].GetComponent<GunController>().swapping
                     && !weapons[index].GetComponent<GunController>().aiming && weapons[index].GetComponent<GunController>().aimFinished
@@ -66,7 +64,7 @@ namespace scgFullBodyController
                     }
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha3) && index != 2 && weapons.Length > 2)
+            else if (Input.GetKeyDown(KeyCode.Alpha3) && index != 2 && weapons.Length > 2 && inventory.hasSniper)
             {
                 if (!weapons[index].GetComponent<GunController>().firing && !weapons[index].GetComponent<GunController>().swapping
                     && !weapons[index].GetComponent<GunController>().aiming && weapons[index].GetComponent<GunController>().aimFinished
