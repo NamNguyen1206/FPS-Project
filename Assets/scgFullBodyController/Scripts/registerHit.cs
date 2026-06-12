@@ -40,6 +40,24 @@ namespace scgFullBodyController
                 tempImpact.transform.Rotate(Vector3.left * 90);
                 Destroy(tempImpact, impactDespawnTime);
             }
+            else if (col.transform.CompareTag("Zombie"))
+            {
+                ZombieController zombie =
+                col.transform.root.GetComponent<ZombieController>();
+
+            if (zombie != null)
+            {
+                zombie.TakeDamage(damage);
+                }
+
+                GameObject tempImpact =
+                Instantiate(impactBloodParticle,
+                transform.position,
+                transform.rotation);
+
+                tempImpact.transform.Rotate(Vector3.left * 90);
+                Destroy(tempImpact, impactDespawnTime);
+            }
             else
             {
                 //We hit something else just spawn basic impact prefab

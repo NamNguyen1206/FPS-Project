@@ -10,7 +10,7 @@ public class ZombieattackState : StateMachineBehaviour
 
 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
+    { 
        player = GameObject.FindGameObjectWithTag("Player").transform;
        navAgent = animator.GetComponent<NavMeshAgent>();
     }
@@ -18,6 +18,12 @@ public class ZombieattackState : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+    //     if (player == null)
+    // {
+    //     animator.SetBool("isAttacking", false);
+    //     return;
+    // } 
+    
        LookAtPlayer();
 
        float distanceToPlayer = Vector3.Distance(player.position, animator.transform.position);
@@ -36,5 +42,16 @@ public class ZombieattackState : StateMachineBehaviour
         navAgent.transform.rotation = Quaternion.LookRotation(direction);
         var yRotation = navAgent.transform.eulerAngles.y;
         navAgent.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+    // if (player == null || navAgent == null)
+    //     return;
+
+    // Vector3 direction =
+    // player.position - navAgent.transform.position;
+    // direction.y = 0f;
+
+    // if (direction.sqrMagnitude < 0.01f)
+    //     return;
+
+    // navAgent.transform.rotation = Quaternion.LookRotation(direction);
     }
 }

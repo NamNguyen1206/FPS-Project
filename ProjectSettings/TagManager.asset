@@ -18,6 +18,7 @@ TagManager:
   - ZombieHand
   - Armor
   - Ground
+  - Zombie
   layers:
   - Default
   - TransparentFX
