@@ -51,6 +51,7 @@ public class ZombiepatrolingState : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (layerIndex != 0 || navAgent == null) return;
        // Check if we reached the destination and move to next waypoint
         if(waypointList.Count > 0 && navAgent.remainingDistance <= navAgent.stoppingDistance)
         {
@@ -66,6 +67,8 @@ public class ZombiepatrolingState : StateMachineBehaviour
         float distanceToPlayer = Vector3.Distance(player.position, animator.transform.position);
         if(distanceToPlayer < detectionArea)
         {
+            Debug.Log("Distance = " + distanceToPlayer);
+            Debug.Log("Set isChasing TRUE");
             animator.SetBool("isChasing", true);
         }
     }
@@ -73,6 +76,10 @@ public class ZombiepatrolingState : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (layerIndex != 0) return;
+        if (navAgent != null && navAgent.isOnNavMesh)
+        {
        navAgent.SetDestination(animator.transform.position);
+        }
     }
 }

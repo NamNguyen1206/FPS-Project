@@ -10,10 +10,9 @@ public class ZombiechaseState : StateMachineBehaviour
     public float attackingDistance = 2f;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-
-    // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (layerIndex != 0) return;
         navAgent = animator.GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         navAgent.speed = chaseSpeed;
@@ -22,6 +21,7 @@ public class ZombiechaseState : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (layerIndex != 0 || player == null || navAgent == null) return;
        navAgent.SetDestination(player.position);
        animator.transform.LookAt(player);
 
@@ -41,6 +41,12 @@ public class ZombiechaseState : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (layerIndex != 0) return;
+
+        if (navAgent != null && navAgent.isOnNavMesh)
+        {
        navAgent.SetDestination(animator.transform.position);
+        }
     }
+    
 }
