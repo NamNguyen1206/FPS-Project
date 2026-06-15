@@ -10,6 +10,7 @@ public class ZombieidleState : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (layerIndex != 0) return;
        timer = 0;
        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
@@ -17,6 +18,7 @@ public class ZombieidleState : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (layerIndex != 0) return;
        timer += Time.deltaTime;
        if(timer > idleTime)
        {
@@ -33,7 +35,7 @@ public class ZombieidleState : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-       
+       if (layerIndex != 0) return;
     }
 
 }
