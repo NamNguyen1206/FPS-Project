@@ -1,85 +1,127 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
-using System.Collections;
 
 public class ZombiepatrolingState : StateMachineBehaviour
 {
-    float timer;
+    private float timer;
     public float patrolingTime = 10f;
-    Transform player;
-    NavMeshAgent navAgent;
+
+    private Transform player;
+    private NavMeshAgent navAgent;
 
     public float detectionArea = 18f;
     public float patrolspeed = 2f;
 
-    List<Transform> waypointList = new List<Transform>();
+    private List<Transform> waypointList = new List<Transform>();
+    private int currentWaypointIndex;
 
-    // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    // Called when entering Patrol State
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         Debug.Log("ENTER PATROL STATE");
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+
+        if (playerObj != null)
+        {
+            player = playerObj.transform;
+        }
+
         navAgent = animator.GetComponent<NavMeshAgent>();
 
+        if (navAgent == null)
+        {
+            Debug.LogError("NavMeshAgent not found on Zombie!");
+            return;
+        }
+
         navAgent.speed = patrolspeed;
-        timer = 0;
+        timer = 0f;
 
-       // -- Get all waypoints and move to first waypoint --//
-       waypointList.Clear(); // Clear previous waypoints to avoid duplicates
-       GameObject waypointCluster = GameObject.FindGameObjectWithTag("Waypoints");
-       //Debug.Log("Waypoint Cluster = " + waypointCluster);
-       if(waypointCluster != null)
-       {
-            Debug.Log("Child Count = " + waypointCluster.transform.childCount);
+        waypointList.Clear();
 
-            foreach(Transform waypoint in waypointCluster.transform)
-            {
-               waypointList.Add(waypoint);
-               Debug.Log("Waypoint count = " + waypointList.Count);
-            }
-       }
-       
-       if(waypointList.Count > 0)
-       {
-           Vector3 nextPosition = waypointList[Random.Range(0, waypointList.Count)].position;
-           navAgent.SetDestination(nextPosition);
-           Debug.Log("Going to: " + nextPosition);
-       }
+        ZombieController zombie = animator.GetComponent<ZombieController>();
+
+        if (zombie != null)
+        {
+            waypointList.AddRange(zombie.patrolPoints);
+        }
+
+        currentWaypointIndex = 0;
+
+        if (waypointList.Count > 0)
+        {
+            navAgent.SetDestination(
+                waypointList[currentWaypointIndex].position
+            );
+
+            Debug.Log("Going To: " +
+                      waypointList[currentWaypointIndex].name);
+        }
+        else
+        {
+            Debug.LogWarning(
+                animator.name +
+                " has no patrol points assigned!"
+            );
+        }
     }
 
-    // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    // Called every frame while in Patrol State
+    public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (layerIndex != 0 || navAgent == null) return;
-       // Check if we reached the destination and move to next waypoint
-        if(waypointList.Count > 0 && navAgent.remainingDistance <= navAgent.stoppingDistance)
+        if (navAgent == null)
+            return;
+
+        // Move to next waypoint when reaching current one
+        if (waypointList.Count > 0 &&
+            !navAgent.pathPending &&
+            navAgent.remainingDistance <= navAgent.stoppingDistance)
         {
-            navAgent.SetDestination(waypointList[Random.Range(0, waypointList.Count)].position);
+            currentWaypointIndex++;
+
+            if (currentWaypointIndex >= waypointList.Count)
+            {
+                currentWaypointIndex = 0;
+            }
+
+            navAgent.SetDestination(
+                waypointList[currentWaypointIndex].position
+            );
         }
 
         timer += Time.deltaTime;
-        if(timer > patrolingTime)
+
+        if (timer > patrolingTime)
         {
             animator.SetBool("isPatroling", false);
         }
 
-        float distanceToPlayer = Vector3.Distance(player.position, animator.transform.position);
-        if(distanceToPlayer < detectionArea)
+        // Detect Player
+        if (player != null)
         {
-            Debug.Log("Distance = " + distanceToPlayer);
-            Debug.Log("Set isChasing TRUE");
-            animator.SetBool("isChasing", true);
+            float distanceToPlayer =
+                Vector3.Distance(
+                    player.position,
+                    animator.transform.position
+                );
+
+            if (distanceToPlayer < detectionArea)
+            {
+                animator.SetBool("isChasing", true);
+            }
         }
     }
 
-    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    // Called when leaving Patrol State
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (layerIndex != 0) return;
-        if (navAgent != null && navAgent.isOnNavMesh)
+        if (navAgent != null &&
+            navAgent.enabled &&
+            navAgent.isOnNavMesh)
         {
-       navAgent.SetDestination(animator.transform.position);
+            navAgent.ResetPath();
         }
     }
 }

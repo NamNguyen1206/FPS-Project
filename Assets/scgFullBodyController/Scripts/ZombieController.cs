@@ -1,11 +1,16 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections.Generic;
+using System.Collections;
 
 public class ZombieController : MonoBehaviour
 {
     [Header("Stats")]
     public int ZombieDamage = 20;
     [SerializeField] private int HP = 100;
+
+    [Header("Patrol Points")]
+    public List<Transform> patrolPoints = new List<Transform>();
 
     [Header("References")]
     public bool useRagdoll = false;
