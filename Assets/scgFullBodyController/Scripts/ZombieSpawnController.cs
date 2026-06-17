@@ -1,35 +1,76 @@
-using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-
+using UnityEngine;
 
 public class ZombieSpawnController : MonoBehaviour
 {
+    [Header("Zombie Prefabs")]
     public GameObject[] zombiePrefabs;
+
+    [Header("Spawn Points")]
     public Transform[] spawnPoints;
-    public float timeBetweenWave = 10f;
-    [SerializeField] private float waveTimer = 0f;
-    private int waveNumber = 1;
-    public int zombiePerWave = 4;
 
-    void StartNewWave()
+    [Header("Spawn Settings")]
+    public float spawnDelay = 10f;
+    public int zombieCount = 5;
+    public float spawnRadius = 4f;
+
+    private void Start()
     {
-        waveTimer = 0f;
-        zombiePerWave +=2;
-        float minDistance = 4f;
-        for (int i = 0; i < zombiePerWave; i++)
+        StartCoroutine(SpawnAfterDelay());
+    }
+
+    private IEnumerator SpawnAfterDelay()
+    {
+        yield return new WaitForSeconds(spawnDelay);
+
+        SpawnZombies();
+    }
+
+    private void SpawnZombies()
+    {
+        if (zombiePrefabs.Length == 0)
         {
-            int randomSpawnIndex = Random.Range(0, spawnPoints.Length);
-            Transform spawnPoint = spawnPoints[randomSpawnIndex];
-
-            GameObject randomZombiePrefab = zombiePrefabs[Random.Range(0, zombiePrefabs.Length)];
-
-            Vector3 spawnPosition = spawnPoint.position + Random.insideUnitSphere * minDistance;
-            
-            spawnPosition.y = spawnPoint.position.y;
-            
-            Instantiate(randomZombiePrefab, spawnPosition, spawnPoint.rotation);
+            Debug.LogWarning("No Zombie Prefabs assigned!");
+            return;
         }
-        waveNumber++;
+
+        if (spawnPoints.Length == 0)
+        {
+            Debug.LogWarning("No Spawn Points assigned!");
+            return;
+        }
+
+        for (int i = 0; i < zombieCount; i++)
+        {
+            int randomSpawnIndex =
+                Random.Range(0, spawnPoints.Length);
+
+            Transform spawnPoint =
+                spawnPoints[randomSpawnIndex];
+
+            GameObject randomZombiePrefab =
+                zombiePrefabs[
+                    Random.Range(0, zombiePrefabs.Length)
+                ];
+
+            Vector2 randomOffset =
+                Random.insideUnitCircle * spawnRadius;
+
+            Vector3 spawnPosition =
+                spawnPoint.position +
+                new Vector3(
+                    randomOffset.x,
+                    0f,
+                    randomOffset.y
+                );
+
+            Instantiate(
+                randomZombiePrefab,
+                spawnPosition,
+                spawnPoint.rotation
+            );
+        }
+
+        Debug.Log($"Spawned {zombieCount} zombies.");
     }
 }
