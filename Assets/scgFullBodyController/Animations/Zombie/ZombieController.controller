@@ -189,7 +189,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Chase_State
-  m_Speed: 1
+  m_Speed: 1.25
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 2358701932423425840}
@@ -375,7 +375,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombiepatrolingState
   patrolingTime: 30
-  detectionArea: 10
+  detectionArea: 8
   patrolspeed: 0.5
 --- !u!1101 &1808980858999111809
 AnimatorStateTransition:
@@ -531,8 +531,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa2b70c16d16a354e895419b93e1c3dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombiechaseState
-  chaseSpeed: 5
-  stopChasingDistance: 30
+  chaseSpeed: 3
+  stopChasingDistance: 20
   attackingDistance: 2
 --- !u!1101 &6107295465570459233
 AnimatorStateTransition:
