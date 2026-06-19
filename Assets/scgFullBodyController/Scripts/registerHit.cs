@@ -16,6 +16,8 @@ namespace scgFullBodyController
 
         void OnCollisionEnter(Collision col)
         {
+            //Debug.Log("Hit Object = " + col.transform.name);
+            //Debug.Log("Hit Tag = " + col.transform.tag);
             ExplosiveBarrel explosiveBarrel = col.transform.GetComponentInParent<ExplosiveBarrel>();
 
             if (explosiveBarrel != null)
@@ -42,8 +44,16 @@ namespace scgFullBodyController
             }
             else if (col.transform.CompareTag("Zombie"))
             {
-                ZombieController zombie =
-                col.transform.root.GetComponent<ZombieController>();
+                //ZombieController zombie = col.transform.root.GetComponent<ZombieController>();
+                //Debug.Log("Zombie Controller = " + zombie);
+                //Debug.Log("Hit Object = " + col.transform.name);
+
+            ZombieController zombie = col.transform.GetComponent<ZombieController>();
+            //Debug.Log("GetComponent = " + zombie);
+            ZombieController zombieParent = col.transform.GetComponentInParent<ZombieController>();
+            //Debug.Log("GetComponentInParent = " + zombieParent);
+            ZombieController zombieRoot = col.transform.root.GetComponent<ZombieController>();
+            //Debug.Log("Root = " + zombieRoot);
 
             if (zombie != null)
             {
