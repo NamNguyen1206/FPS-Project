@@ -18,13 +18,13 @@ public class ZombieHand : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Trigger Enter: " + other.name);
+        //Debug.Log("Trigger Enter: " + other.name);
         TryDamagePlayer(other.transform);
     }
 
     private void OnTriggerStay(Collider other)
     {
-        Debug.Log("Trigger Stay: " + other.name);
+        //Debug.Log("Trigger Stay: " + other.name);
         TryDamagePlayer(other.transform);
     }
 
@@ -63,7 +63,7 @@ public class ZombieHand : MonoBehaviour
 
     private bool CanDamage()
     {
-        Debug.Log("isAttacking = " + animator.GetBool("isAttacking"));
+        //Debug.Log("isAttacking = " + animator.GetBool("isAttacking"));
         if (Time.time < nextDamageTime)
         {
             return false;

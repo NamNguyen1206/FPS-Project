@@ -19,7 +19,7 @@ public class ZombiepatrolingState : StateMachineBehaviour
     // Called when entering Patrol State
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Debug.Log("ENTER PATROL STATE");
+        //Debug.Log("ENTER PATROL STATE");
 
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
 
@@ -56,8 +56,7 @@ public class ZombiepatrolingState : StateMachineBehaviour
                 waypointList[currentWaypointIndex].position
             );
 
-            Debug.Log("Going To: " +
-                      waypointList[currentWaypointIndex].name);
+            //Debug.Log("Going To: " + waypointList[currentWaypointIndex].name);
         }
         else
         {
