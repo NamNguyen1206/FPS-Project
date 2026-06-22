@@ -430,7 +430,6 @@ GameObject:
   - component: {fileID: 8870399640839782929}
   - component: {fileID: 6226631834837774621}
   - component: {fileID: 7637106619441993919}
-  - component: {fileID: 2608495570388063592}
   m_Layer: 0
   m_Name: Hangar_v2_6_Open
   m_TagString: Untagged
@@ -536,28 +535,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 19.876347, y: 8.140582, z: 13.857668}
   m_Center: {x: -0.0000019073486, y: 4.0646076, z: -0.0000009536743}
---- !u!95 &2608495570388063592
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6578522708202115139}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e227e578c9e1e29438b7ff8391f28892, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6670974613366682756
 GameObject:
   m_ObjectHideFlags: 0
