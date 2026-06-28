@@ -22,8 +22,9 @@ public class DoorRayCast : MonoBehaviour
 
             if (Physics.Raycast(ray,out hit,interactDistance))
             {
-                //Debug.Log("Hit: " + hit.collider.name);
-                DoorController door = hit.collider.GetComponent<DoorController>();
+                Debug.Log("Hit: " + hit.collider.name);
+                DoorController door = hit.collider.GetComponentInParent<DoorController>();
+                MystoryBox mysteryBox = hit.collider.GetComponentInParent<MystoryBox>();
 
                 if (door != null)
                 {
@@ -37,6 +38,19 @@ public class DoorRayCast : MonoBehaviour
                         Debug.Log("Door Locked - Need Hangar Key");
                     }
                 }
+                else if (mysteryBox != null)
+                {
+                    Debug.Log("MystoryBox found: " + mysteryBox.name);
+                    mysteryBox.Interact();
+                }
+                else
+                {
+                    Debug.Log("No interactable found on hit object");
+                }
+            }
+            else
+            {
+                Debug.Log("Raycast missed");
             }
         }
     }
