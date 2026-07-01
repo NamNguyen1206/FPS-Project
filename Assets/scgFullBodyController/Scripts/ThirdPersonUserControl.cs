@@ -1,7 +1,3 @@
-//SlapChickenGames
-//2021
-//Modified user control code also from unity standard assets
-
 using System;
 using System.Collections.Generic;
 using UnityEngine;

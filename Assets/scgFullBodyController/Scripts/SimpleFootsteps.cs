@@ -1,8 +1,4 @@
-﻿//SlapChickenGames
-//2021
-//Simple foot logic for detecting movement and adding sound
-
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 namespace scgFullBodyController

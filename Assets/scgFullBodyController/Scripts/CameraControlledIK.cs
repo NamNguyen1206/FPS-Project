@@ -1,8 +1,4 @@
-﻿//SlapChickenGames
-//2021
-//Camera spine controller
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

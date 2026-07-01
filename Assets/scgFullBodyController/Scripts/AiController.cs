@@ -1,6 +1,4 @@
-﻿//Code modified by SlapChickenGames
-//2021
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 namespace scgFullBodyController

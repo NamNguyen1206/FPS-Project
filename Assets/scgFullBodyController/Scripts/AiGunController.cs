@@ -1,8 +1,4 @@
-﻿//SlapChickenGames
-//2021
-//Gun controller for AI
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;

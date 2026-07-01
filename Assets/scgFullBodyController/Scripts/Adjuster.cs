@@ -1,8 +1,4 @@
-﻿//SlapChickenGames
-//2021
-//Hand and Head IK system 
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

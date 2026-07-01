@@ -1,8 +1,4 @@
-﻿//SlapChickenGames
-//2021
-//Health controller
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;

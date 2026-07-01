@@ -1,7 +1,3 @@
-//SlapChickenGames
-//2021
-//Modified ThirdPersonCharacter.cs from Unity standard assets to allow for fullbody control 
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

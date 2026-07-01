@@ -1,8 +1,4 @@
-﻿//SlapChickenGames
-//2021
-//Camera controller for x and y movement
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
