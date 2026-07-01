@@ -10,8 +10,8 @@ public class InteractionManager : MonoBehaviour
 
     public WeaponPickup hoveredWeapon;
 
-    [SerializeField]
-    private WeaponInventory inventory;
+    [SerializeField] private WeaponInventory inventory;
+    [SerializeField] private GameObject actionText;
 
     private void Awake()
     {
@@ -27,9 +27,11 @@ public class InteractionManager : MonoBehaviour
     private void Update()
     {
         DetectWeapon();
+        actionText.SetActive(hoveredWeapon != null);
 
         if (Input.GetKeyDown(KeyCode.E))
         {
+            actionText.SetActive(false);
             PickupWeapon();
         }
     }
@@ -63,6 +65,10 @@ public class InteractionManager : MonoBehaviour
         inventory.AddWeapon(hoveredWeapon.weaponType);
 
         Destroy(hoveredWeapon.gameObject);
+    }
+    void OnMouseOver()
+    {
+        actionText.SetActive(true);
     }
 }
 }

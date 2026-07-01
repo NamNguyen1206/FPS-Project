@@ -10,7 +10,7 @@ public class DoorController : MonoBehaviour
 {
     anim = GetComponent<Animator>();
 
-    Debug.Log("Animator Object = " + anim.gameObject.name);
+    //Debug.Log("Animator Object = " + anim.gameObject.name);
 }
 
     public void Interact()
