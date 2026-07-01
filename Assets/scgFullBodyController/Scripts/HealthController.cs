@@ -60,17 +60,18 @@ namespace scgFullBodyController
             //Only update HUD text if we are a player
             if (!isAiOrDummy)
             {
-                if (health > 0)
+                GameObject ui = GameObject.FindGameObjectWithTag("hud");
+                hudController hud = ui != null ? ui.GetComponent<hudController>() : null;
+
+                if (hud != null && health > 0)
                 {
-                    GameObject ui = GameObject.FindGameObjectWithTag("hud");
-                    ui.GetComponent<hudController>().uiHealth.text = health.ToString();
-                    ui.GetComponent<hudController>().uiArmor.text = armor.ToString();
+                    hud.SetHealth(health, maxHealth);
+                    hud.SetArmor(armor);
                 }
-                else
+                else if (hud != null)
                 {
-                    GameObject ui = GameObject.FindGameObjectWithTag("hud");
-                    ui.GetComponent<hudController>().uiHealth.text = "0";
-                    ui.GetComponent<hudController>().uiArmor.text = "0";
+                    hud.SetHealth(0, maxHealth);
+                    hud.SetArmor(0);
                 }
             }
 

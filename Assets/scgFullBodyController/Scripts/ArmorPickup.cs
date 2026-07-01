@@ -3,7 +3,7 @@ using scgFullBodyController;
 
 public class ArmorPickup : MonoBehaviour
 {
-    [SerializeField] private float armorAmount = 100f;
+    [SerializeField] private float armorAmount = 50f;
     private bool collected = false;
 
     private void OnTriggerEnter(Collider other)
