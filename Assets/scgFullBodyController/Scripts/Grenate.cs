@@ -8,6 +8,9 @@ public class Grenate : MonoBehaviour
     [SerializeField] private GameObject exoplosionEffectPrefab;
     [SerializeField] private Vector3 explosionParticalOffset = new Vector3(0,1,0);
     [SerializeField] private GameObject audioSourcePrefab;
+
+    [Header("Damage Setting")]
+    [SerializeField] private int damage = 100;
     
     [Header("Explosion Setting")]
     [SerializeField] private float explosionDeley = 3f;
@@ -49,12 +52,21 @@ public class Grenate : MonoBehaviour
     void NearbyForceApply()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position,explosionRadius);
+        HashSet<ZombieController> damagedZombies = new HashSet<ZombieController>();
+
         foreach(Collider nearbyObject in colliders)
         {
             Rigidbody rb = nearbyObject.GetComponent<Rigidbody>();
+
             if(rb != null)
             {
-                rb.AddExplosionForce(explosionForce, transform.position,explosionRadius);
+                rb.AddExplosionForce(explosionForce, transform.position,explosionRadius, 1f, ForceMode.Impulse);
+            }
+            ZombieController zombie = nearbyObject.GetComponent<ZombieController>();
+            if(zombie != null)
+            {
+                damagedZombies.Add(zombie);
+                zombie.TakeDamage(damage);
             }
         }
     }
