@@ -22,15 +22,15 @@ public class UIHealthArmorDisplay : MonoBehaviour
         if (hudController == null || healthController == null)
             return;
 
-        if (healthController.health > 0)
-        {
-            hudController.uiHealth.text = healthController.health.ToString();
-        }
-        else
-        {
-            hudController.uiHealth.text = "0";
-        }
+        // if (healthController.health > 0)
+        // {
+        //     hudController.uiHealth.text = healthController.health.ToString();
+        // }
+        // else
+        // {
+        //     hudController.uiHealth.text = "0";
+        // }
 
-        hudController.uiArmor.text = healthController.armor.ToString();
+        // hudController.uiArmor.text = healthController.armor.ToString();
     }
 }

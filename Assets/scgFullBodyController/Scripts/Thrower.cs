@@ -3,8 +3,9 @@ using UnityEngine.UIElements;
 
 public class Thrower : MonoBehaviour
 {
-    [Header("Grenade Prefab")]
+    [Header("Grenade Inventory")]
     [SerializeField] private GameObject grenadePrefab;
+    private GrenadeInventory inventory;
 
     [Header("Grenade Settings")]
     [SerializeField] private KeyCode throwKey = KeyCode.G;
@@ -26,6 +27,11 @@ public class Thrower : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        // if (inventory == null)
+        // {
+        //     Debug.LogError("GrenadeInventory not found!");
+        // }
+        inventory = GetComponent<GrenadeInventory>();
         mainCamera = Camera.main;
     }
 
@@ -47,6 +53,11 @@ public class Thrower : MonoBehaviour
     }
     void StartThrowing()
     {
+        if (inventory == null || !inventory.HasGrenade())
+        {
+            Debug.Log("No Grenades!");
+            return;
+        }
         isCharging = true;
         chargeTime = 0f;
         trajectoryLine.enabled = true;
@@ -58,8 +69,13 @@ public class Thrower : MonoBehaviour
         ShowTrajectory(throwPosition.position + throwPosition.forward, grenadeVelocity);
     }
     void ReleaseThrow()
-    {
-        ThrowGrenade(Mathf.Min(chargeTime * throwForce, maxForce));
+    {   if (!isCharging)
+        return;
+
+        if (inventory.UseGrenade())
+        {
+            ThrowGrenade(Mathf.Min(chargeTime * throwForce, maxForce));
+        }
         isCharging = false;
         trajectoryLine.enabled = false;
     }

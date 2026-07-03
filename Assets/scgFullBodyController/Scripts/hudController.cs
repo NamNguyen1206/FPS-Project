@@ -6,9 +6,10 @@ namespace scgFullBodyController
     public class hudController : MonoBehaviour
     {
         //Simple references to the HUD for other scripts to access and modify
-        public Text uiHealth;
+        //public Text uiHealth;
         public Text uiBullets;
-        public Text uiArmor;
+        public Text uiGrenades;
+        //public Text uiArmor;
         public GameObject crosshair;
 
         [Header("Health Bar")]
@@ -43,24 +44,31 @@ namespace scgFullBodyController
             health = Mathf.Clamp(currentHealth, 0f, maxHealth);
             lerpTime = 0f;
 
-            if (uiHealth != null)
-            {
-                uiHealth.text = health.ToString("0");
-            }
+            // if (uiHealth != null)
+            // {
+            //     uiHealth.text = health.ToString("0");
+            // }
         }
 
         public void SetArmor(float armor)
         {
             armor = Mathf.Clamp(armor, 0f, maxArmor);
 
-            if (uiArmor != null)
-            {
-                uiArmor.text = armor.ToString("0");
-            }
+            // if (uiArmor != null)
+            // {
+            //     uiArmor.text = armor.ToString("0");
+            // }
 
             if (armorBar != null)
             {
                 armorBar.fillAmount = armor / Mathf.Max(maxArmor, 1f);
+            }
+        }
+        public void SetGrenades(int amount)
+        {
+            if (uiGrenades != null)
+            {
+                uiGrenades.text = amount.ToString();
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIGameController : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class UIGameController : MonoBehaviour
 
     void Start ()
 	{
-	    ShowInfo();
+    	ShowInfo();
 	}
 	
 	// Update is called once per frame
@@ -46,6 +47,6 @@ public class UIGameController : MonoBehaviour
 
     public void RestartGame()
     {
-        Application.LoadLevel("Main");
+        SceneManager.LoadScene("Main");
     }
 }
