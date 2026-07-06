@@ -80,6 +80,11 @@ public class ZombieController : MonoBehaviour
             return;
 
         isDead = true;
+        DropKey drop = GetComponent<DropKey>();
+        if (drop != null)
+        {
+            drop.ZombieDropKey();
+        }
 
         if (navAgent != null)
         {
