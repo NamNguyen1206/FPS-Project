@@ -228,6 +228,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6398707430799130599}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 159467fc6bd1ee94d94d7c44616d2bc7,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5995466216122849543}
   m_SourcePrefab: {fileID: 100100000, guid: 159467fc6bd1ee94d94d7c44616d2bc7, type: 3}
 --- !u!1 &3081006241566699808 stripped
 GameObject:
@@ -341,6 +345,22 @@ MonoBehaviour:
   keyPrefab: {fileID: 3448396079189626616, guid: ef8fefb95bf68e04fb80696b27a4d702,
     type: 3}
   dropPoint: {fileID: 0}
+--- !u!114 &5995466216122849543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3081006241566699808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7c60a11eece1d14a82d865a8d354868, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZombieTarget
+  detectRadius: 18
+  npcTag: NPC
+  playerTag: Player
+  currentTarget: {fileID: 0}
 --- !u!4 &4590623507368309689 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1852576806548013000, guid: 159467fc6bd1ee94d94d7c44616d2bc7,

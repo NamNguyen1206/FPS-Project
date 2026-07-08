@@ -3,16 +3,16 @@ using UnityEngine;
 public class ZombieidleState : StateMachineBehaviour
 {
     float timer;
-    public float idleTime = 0f;
-    Transform player;
+    public float idleTime = 0.1f;
+    ZombieTarget zombieTarget;
 
     public float detectionAreaEnter = 18f;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (layerIndex != 0) return;
-       timer = 0;
-       player = GameObject.FindGameObjectWithTag("Player").transform;
+        timer = 0;
+        zombieTarget = animator.GetComponent<ZombieTarget>();
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -25,8 +25,9 @@ public class ZombieidleState : StateMachineBehaviour
            animator.SetBool("isPatroling", true);
        }
 
-       float distanceToPlayer = Vector3.Distance(player.position, animator.transform.position);
-        if(distanceToPlayer < detectionAreaEnter)
+        Transform target = zombieTarget != null ? zombieTarget.currentTarget : null;
+
+        if (target != null && Vector3.Distance(target.position, animator.transform.position) < detectionAreaEnter)
         {
             animator.SetBool("isChasing", true);
         }

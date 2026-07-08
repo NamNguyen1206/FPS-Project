@@ -5,13 +5,13 @@ using System.Collections.Generic;
 public class ZombiepatrolingState : StateMachineBehaviour
 {
     private float timer;
-    public float patrolingTime = 10f;
+    public float patrolingTime = 30f;
 
-    private Transform player;
+    private ZombieTarget zombieTarget;
     private NavMeshAgent navAgent;
 
     public float detectionArea = 18f;
-    public float patrolspeed = 2f;
+    public float patrolspeed = 0.5f;
 
     private List<Transform> waypointList = new List<Transform>();
     private int currentWaypointIndex;
@@ -21,13 +21,7 @@ public class ZombiepatrolingState : StateMachineBehaviour
     {
         //Debug.Log("ENTER PATROL STATE");
 
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-
-        if (playerObj != null)
-        {
-            player = playerObj.transform;
-        }
-
+        zombieTarget = animator.GetComponent<ZombieTarget>();
         navAgent = animator.GetComponent<NavMeshAgent>();
 
         if (navAgent == null)
@@ -97,16 +91,13 @@ public class ZombiepatrolingState : StateMachineBehaviour
             animator.SetBool("isPatroling", false);
         }
 
-        // Detect Player
-        if (player != null)
-        {
-            float distanceToPlayer =
-                Vector3.Distance(
-                    player.position,
-                    animator.transform.position
-                );
+        Transform target = zombieTarget != null ? zombieTarget.currentTarget : null;
 
-            if (distanceToPlayer < detectionArea)
+        if (target != null)
+        {
+            float distanceToTarget = Vector3.Distance(target.position, animator.transform.position);
+
+            if (distanceToTarget < detectionArea)
             {
                 animator.SetBool("isChasing", true);
             }

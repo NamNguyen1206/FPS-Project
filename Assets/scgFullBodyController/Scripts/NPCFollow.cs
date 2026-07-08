@@ -53,7 +53,7 @@ public class NPCFollow : MonoBehaviour
 
         if (DetectZombie())
         {
-            Debug.Log("Zombie Detected!");
+            //Debug.Log("Zombie Detected!");
             if (!isTerrified)
             {
                 isTerrified = true;
@@ -115,7 +115,7 @@ public class NPCFollow : MonoBehaviour
     bool DetectZombie()
     {
         Collider[] hits = Physics.OverlapSphere(transform.position,detectZombieRadius);
-        Debug.Log("Found: " + hits.Length);
+        //Debug.Log("Found: " + hits.Length);
 
         foreach (Collider hit in hits)
         {

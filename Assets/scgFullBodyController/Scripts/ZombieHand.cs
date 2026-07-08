@@ -19,38 +19,43 @@ public class ZombieHand : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //Debug.Log("Trigger Enter: " + other.name);
-        TryDamagePlayer(other.transform);
+        TryDamageTarget(other.transform);
     }
 
     private void OnTriggerStay(Collider other)
     {
         //Debug.Log("Trigger Stay: " + other.name);
-        TryDamagePlayer(other.transform);
+        TryDamageTarget(other.transform);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        TryDamagePlayer(collision.transform);
+        TryDamageTarget(collision.transform);
     }
 
     private void OnCollisionStay(Collision collision)
     {
-        TryDamagePlayer(collision.transform);
+        TryDamageTarget(collision.transform);
     }
 
-    private void TryDamagePlayer(Transform hitTransform)
+    private void TryDamageTarget(Transform hitTransform)
     {
         if (!CanDamage())
         {
             return;
         }
 
-        if (!hitTransform.CompareTag("Player"))
+        Transform targetRoot = hitTransform.root;
+
+        if (!hitTransform.CompareTag("Player") &&
+            !hitTransform.CompareTag("NPC") &&
+            !targetRoot.CompareTag("Player") &&
+            !targetRoot.CompareTag("NPC"))
         {
             return;
         }
 
-        HealthController healthController = hitTransform.root.GetComponent<HealthController>();
+        HealthController healthController = targetRoot.GetComponent<HealthController>();
 
         if (healthController == null)
         {

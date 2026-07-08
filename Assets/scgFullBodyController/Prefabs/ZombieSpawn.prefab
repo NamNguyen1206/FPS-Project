@@ -239,6 +239,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 4210292431607497099}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6d996710449eebf4190780e1d0e1dbad,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -1262456541092197357}
   m_SourcePrefab: {fileID: 100100000, guid: 6d996710449eebf4190780e1d0e1dbad, type: 3}
 --- !u!1 &8165938573079763072 stripped
 GameObject:
@@ -336,6 +340,22 @@ CapsuleCollider:
   m_Height: 1.9
   m_Direction: 1
   m_Center: {x: 0, y: 0.86, z: 0}
+--- !u!114 &-1262456541092197357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8165938573079763072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7c60a11eece1d14a82d865a8d354868, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZombieTarget
+  detectRadius: 18
+  npcTag: NPC
+  playerTag: Player
+  currentTarget: {fileID: 0}
 --- !u!4 &8314972327855455050 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8145072973764649317, guid: 6d996710449eebf4190780e1d0e1dbad,
