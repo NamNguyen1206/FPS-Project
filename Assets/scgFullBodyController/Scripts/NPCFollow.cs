@@ -3,38 +3,137 @@ using UnityEngine.AI;
 
 public class NPCFollow : MonoBehaviour
 {
-    NavMeshAgent agent;
-    Animator animator;
+    private NavMeshAgent agent;
+    private Animator animator;
+
+    [Header("Follow")]
     public GameObject ObjectToFollow;
+    public bool canFollow = false;
+
+    [Header("Zombie Detection")]
+    public float detectZombieRadius = 8f;
+
+    private bool isTerrified = false;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
     }
+
     void Update()
     {
-        float distance = Vector3.Distance(transform.position, ObjectToFollow.transform.position);
-        if(distance < 3)
+        if (ObjectToFollow == null)
+            return;
+
+        //-----------------------
+        // Toggle Follow
+        //-----------------------
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            canFollow = !canFollow;
+
+            if (!canFollow)
+            {
+                agent.isStopped = true;
+                SetAnimation(0);
+
+                Debug.Log("NPC Stop Following");
+            }
+            else
+            {
+                Debug.Log("NPC Start Following");
+            }
+        }
+
+        //-----------------------
+        // Detect Zombie
+        //-----------------------
+
+        if (DetectZombie())
+        {
+            Debug.Log("Zombie Detected!");
+            if (!isTerrified)
+            {
+                isTerrified = true;
+
+                agent.isStopped = true;
+
+                SetAnimation(3);
+
+                Debug.Log("Zombie Detected");
+            }
+
+            return;
+        }
+        else
+        {
+            if (isTerrified)
+            {
+                isTerrified = false;
+                agent.isStopped = false;
+
+                Debug.Log("Zombie Gone");
+            }
+        }
+
+        //-----------------------
+        // Follow OFF
+        //-----------------------
+
+        if (!canFollow)
+            return;
+
+        float distance = Vector3.Distance(
+            transform.position,
+            ObjectToFollow.transform.position);
+
+        if (distance < 3)
         {
             agent.isStopped = true;
-            animator.SetInteger("C",0);
+            SetAnimation(0);
         }
-        else if (distance >= 3 && distance < 10)
+        else if (distance < 10)
         {
-            //Ai walking
             agent.isStopped = false;
-            agent.SetDestination(ObjectToFollow.transform.position);
-            animator.SetInteger("C",1);
             agent.speed = 2;
-        }
-        else if(distance > 10)
-        {
-            //Ai Running
-            agent.isStopped = false ;
             agent.SetDestination(ObjectToFollow.transform.position);
-            animator.SetInteger("C",2);
-            agent.speed = 6;
+
+            SetAnimation(1);
         }
+        else
+        {
+            agent.isStopped = false;
+            agent.speed = 6;
+            agent.SetDestination(ObjectToFollow.transform.position);
+
+            SetAnimation(2);
+        }
+    }
+
+    bool DetectZombie()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position,detectZombieRadius);
+        Debug.Log("Found: " + hits.Length);
+
+        foreach (Collider hit in hits)
+        {
+            if (hit.CompareTag("Zombie"))
+                return true;
+        }
+
+        return false;
+    }
+
+    void SetAnimation(int state)
+    {
+        animator.SetInteger("C", state);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, detectZombieRadius);
     }
 }

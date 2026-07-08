@@ -19,6 +19,7 @@ TagManager:
   - Armor
   - Ground
   - Zombie
+  - NPC
   layers:
   - Default
   - TransparentFX
