@@ -94,7 +94,7 @@ public class NPCFollow : MonoBehaviour
             agent.isStopped = true;
             SetAnimation(0);
         }
-        else if (distance < 10)
+        else if (distance >= 3 && distance < 10)
         {
             agent.isStopped = false;
             agent.speed = 2;
@@ -102,7 +102,7 @@ public class NPCFollow : MonoBehaviour
 
             SetAnimation(1);
         }
-        else
+        else if (distance >= 10)
         {
             agent.isStopped = false;
             agent.speed = 6;
