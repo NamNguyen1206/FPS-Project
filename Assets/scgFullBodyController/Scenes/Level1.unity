@@ -1743,17 +1743,17 @@ PrefabInstance:
     - target: {fileID: 2303921294396319333, guid: b47bdf1669865c841ace96330ee3d7ec,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 59.17
+      value: 0.823
       objectReference: {fileID: 0}
     - target: {fileID: 2303921294396319333, guid: b47bdf1669865c841ace96330ee3d7ec,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.329125
+      value: 2.78
       objectReference: {fileID: 0}
     - target: {fileID: 2303921294396319333, guid: b47bdf1669865c841ace96330ee3d7ec,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -23.438602
+      value: -30.127
       objectReference: {fileID: 0}
     - target: {fileID: 2303921294396319333, guid: b47bdf1669865c841ace96330ee3d7ec,
         type: 3}
@@ -24556,6 +24556,31 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4000013041734426, guid: d803e729730d97a4e89edf13b602b3f4,
     type: 3}
   m_PrefabInstance: {fileID: 294635531}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &516337186 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5972382809153124418, guid: 9d900c4c1845cac438fab03abc5a6d0f,
+    type: 3}
+  m_PrefabInstance: {fileID: 5652582968688343330}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &516337193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 516337186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a1078d7f16f5e145a3137f0c509fb51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NavKeypad.SlidingDoor
+  anim: {fileID: 516337196}
+--- !u!95 &516337196 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8679819712791336474, guid: 9d900c4c1845cac438fab03abc5a6d0f,
+    type: 3}
+  m_PrefabInstance: {fileID: 5652582968688343330}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &525998799 stripped
 GameObject:
@@ -83824,7 +83849,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1936805409
 Transform:
   m_ObjectHideFlags: 0
@@ -94105,17 +94130,17 @@ PrefabInstance:
     - target: {fileID: 4679537848544463616, guid: d1a06fc668485e14aa61f44488b77bc9,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 63.9
+      value: 3.46
       objectReference: {fileID: 0}
     - target: {fileID: 4679537848544463616, guid: d1a06fc668485e14aa61f44488b77bc9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.014
+      value: 1.623
       objectReference: {fileID: 0}
     - target: {fileID: 4679537848544463616, guid: d1a06fc668485e14aa61f44488b77bc9,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -14.8
+      value: -30.824
       objectReference: {fileID: 0}
     - target: {fileID: 4679537848544463616, guid: d1a06fc668485e14aa61f44488b77bc9,
         type: 3}
@@ -94299,7 +94324,7 @@ PrefabInstance:
     - target: {fileID: 7637106619441993919, guid: 9d900c4c1845cac438fab03abc5a6d0f,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7637106619441993919, guid: 9d900c4c1845cac438fab03abc5a6d0f,
         type: 3}
@@ -94324,12 +94349,16 @@ PrefabInstance:
     - target: {fileID: 8679819712791336474, guid: 9d900c4c1845cac438fab03abc5a6d0f,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5972382809153124418, guid: 9d900c4c1845cac438fab03abc5a6d0f,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 516337193}
   m_SourcePrefab: {fileID: 100100000, guid: 9d900c4c1845cac438fab03abc5a6d0f, type: 3}
 --- !u!1001 &6121157048513060949
 PrefabInstance:

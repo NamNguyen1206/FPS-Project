@@ -283,7 +283,6 @@ GameObject:
   - component: {fileID: 1625049048561918677}
   - component: {fileID: 8679819712791336474}
   - component: {fileID: 8901027265841315980}
-  - component: {fileID: 2554193745482035039}
   m_Layer: 0
   m_Name: Hangar_v2_6_door1
   m_TagString: Untagged
@@ -406,18 +405,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.13337117, y: 2.6384964, z: 3.4096909}
   m_Center: {x: 0.0010407269, y: 0.0000023841858, z: -0.0000038146973}
---- !u!114 &2554193745482035039
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5972382809153124418}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eab4297cf2c48b4aaecb970997285f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DoorController
 --- !u!1 &6578522708202115139
 GameObject:
   m_ObjectHideFlags: 0
