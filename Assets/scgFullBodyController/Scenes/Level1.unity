@@ -24557,31 +24557,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 294635531}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &516337186 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5972382809153124418, guid: 9d900c4c1845cac438fab03abc5a6d0f,
-    type: 3}
-  m_PrefabInstance: {fileID: 5652582968688343330}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &516337193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 516337186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a1078d7f16f5e145a3137f0c509fb51, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NavKeypad.SlidingDoor
-  anim: {fileID: 516337196}
---- !u!95 &516337196 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 8679819712791336474, guid: 9d900c4c1845cac438fab03abc5a6d0f,
-    type: 3}
-  m_PrefabInstance: {fileID: 5652582968688343330}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &525998799 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1000013235463752, guid: d885e290456a887418a2fd556c1b1517,
@@ -67071,6 +67046,31 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1551757513}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1552764186 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5972382809153124418, guid: 9d900c4c1845cac438fab03abc5a6d0f,
+    type: 3}
+  m_PrefabInstance: {fileID: 5652582968688343330}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1552764188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1552764186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a1078d7f16f5e145a3137f0c509fb51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NavKeypad.SlidingDoor
+  anim: {fileID: 1552764189}
+--- !u!95 &1552764189 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 15340259285110427, guid: 9d900c4c1845cac438fab03abc5a6d0f,
+    type: 3}
+  m_PrefabInstance: {fileID: 5652582968688343330}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1560512542
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -94351,6 +94351,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8901027265841315980, guid: 9d900c4c1845cac438fab03abc5a6d0f,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -94358,7 +94363,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5972382809153124418, guid: 9d900c4c1845cac438fab03abc5a6d0f,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 516337193}
+      addedObject: {fileID: 1552764188}
   m_SourcePrefab: {fileID: 100100000, guid: 9d900c4c1845cac438fab03abc5a6d0f, type: 3}
 --- !u!1001 &6121157048513060949
 PrefabInstance:
