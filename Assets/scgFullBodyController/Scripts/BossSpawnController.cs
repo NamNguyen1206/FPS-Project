@@ -3,20 +3,21 @@ using System.Collections;
 
 public class BossSpawnController : MonoBehaviour
 {
-[Header("Zombie Prefabs")]
+    [Header("Zombie Prefabs")]
     public GameObject[] zombiePrefabs;
 
     [Header("Spawn Points")]
     public Transform[] spawnPoints;
 
     [Header("Spawn Settings")]
+    private bool canSpawnBoss = false;
     public float spawnDelay = 10f;
     public int zombieCount = 5;
     public float spawnRadius = 4f;
 
     private void Start()
     {
-        StartCoroutine(SpawnAfterDelay());
+        //bossSpawner = FindFirstObjectByType<BossSpawnController>();
     }
 
     private IEnumerator SpawnAfterDelay()
@@ -26,6 +27,15 @@ public class BossSpawnController : MonoBehaviour
         SpawnZombies();
     }
 
+
+    public void ActivateBossSpawn()
+    {
+    if (canSpawnBoss)
+        return;
+
+        canSpawnBoss = true;
+        StartCoroutine(SpawnAfterDelay());
+    }
     private void SpawnZombies()
     {
         if (zombiePrefabs.Length == 0)
