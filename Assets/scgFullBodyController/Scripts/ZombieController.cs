@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.Events;
 
 public class ZombieController : MonoBehaviour
 {
@@ -23,6 +24,8 @@ public class ZombieController : MonoBehaviour
     private NavMeshAgent navAgent;
     private Collider MonsterCollider;
 
+    [Header("Events")]
+    public UnityEvent onDeath;
 
     private bool isDead = false;
     
@@ -80,6 +83,9 @@ public class ZombieController : MonoBehaviour
             return;
 
         isDead = true;
+
+        onDeath?.Invoke();
+        
         DropKey drop = GetComponent<DropKey>();
         if (drop != null)
         {

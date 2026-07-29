@@ -15,6 +15,9 @@ public class BossSpawnController : MonoBehaviour
     public int zombieCount = 5;
     public float spawnRadius = 4f;
 
+    [Header("Mission")]
+    [SerializeField] private GameObject missionCompleteTrigger;
+
     private void Start()
     {
         //bossSpawner = FindFirstObjectByType<BossSpawnController>();
@@ -73,14 +76,27 @@ public class BossSpawnController : MonoBehaviour
                     0f,
                     randomOffset.y
                 );
-
-            Instantiate(
+            GameObject boss = Instantiate(
                 randomZombiePrefab,
                 spawnPosition,
                 spawnPoint.rotation
-            );
-        }
+                );
+                ZombieController controller = boss.GetComponent<ZombieController>();
 
+            if (controller != null)
+            {
+                controller.onDeath.AddListener(OnBossDeath);
+            }
+        }
         Debug.Log($"Spawned {zombieCount} zombies.");
+    }
+    private void OnBossDeath()
+    {
+    Debug.Log("Boss Died!");
+
+    if (missionCompleteTrigger != null)
+        {
+            missionCompleteTrigger.SetActive(true);
+        }
     }
 }
