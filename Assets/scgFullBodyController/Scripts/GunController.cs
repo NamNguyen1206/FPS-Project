@@ -243,7 +243,8 @@ namespace scgFullBodyController
 
         void LateUpdate()
         {
-            if (Input.GetButtonDown("Fire2") && aimFinished && !swapping)
+            //if (Input.GetButtonDown("Fire2") && aimFinished && !swapping)
+            if (Weapon != WeaponTypes.Pistol && Input.GetButtonDown("Fire2") && aimFinished && !swapping)
             {
                 originalAimOffsetRot = holdingHandOffsetRot;
                 originalAimOffsetCamPos = aimPosition;
@@ -259,7 +260,8 @@ namespace scgFullBodyController
                 GameObject ui = GameObject.FindGameObjectWithTag("hud");
                 ui.GetComponent<hudController>().crosshair.SetActive(false);
             }
-            else if (Input.GetButtonUp("Fire2") && aiming && !swapping)
+            //else if (Input.GetButtonUp("Fire2") && aiming && !swapping)
+            else if (Weapon != WeaponTypes.Pistol && Input.GetButtonUp("Fire2") && aiming && !swapping)
             {
                 aiming = false;
                 aimTimeElapsed = 0;
