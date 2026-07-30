@@ -37,7 +37,7 @@ public class ZombiechaseState : StateMachineBehaviour
         }
 
         navAgent.SetDestination(target.position);
-        LookAtTarget(animator.transform, target);
+        //LookAtTarget(animator.transform, target);
 
         float distanceToTarget = Vector3.Distance(target.position, animator.transform.position);
 
@@ -60,18 +60,18 @@ public class ZombiechaseState : StateMachineBehaviour
 
         if (navAgent != null && navAgent.isOnNavMesh)
         {
-       navAgent.SetDestination(animator.transform.position);
+            navAgent.SetDestination(animator.transform.position);
         }
     }
     
-    private void LookAtTarget(Transform zombieTransform, Transform target)
-    {
-        Vector3 direction = target.position - zombieTransform.position;
-        direction.y = 0f;
+    // private void LookAtTarget(Transform zombieTransform, Transform target)
+    // {
+    //     Vector3 direction = target.position - zombieTransform.position;
+    //     direction.y = 0f;
 
-        if (direction.sqrMagnitude <= 0.001f)
-            return;
+    //     if (direction.sqrMagnitude <= 0.001f)
+    //         return;
 
-        zombieTransform.rotation = Quaternion.LookRotation(direction);
-    }
+    //     zombieTransform.rotation = Quaternion.LookRotation(direction);
+    // }
 }

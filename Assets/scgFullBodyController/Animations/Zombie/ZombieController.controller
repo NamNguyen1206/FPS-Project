@@ -189,7 +189,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Chase_State
-  m_Speed: 1.25
+  m_Speed: 1.5
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 2358701932423425840}
@@ -197,7 +197,7 @@ AnimatorState:
   m_StateMachineBehaviours:
   - {fileID: 5965034370870526584}
   m_Position: {x: 50, y: 50, z: 0}
-  m_IKOnFeet: 0
+  m_IKOnFeet: 1
   m_WriteDefaultValues: 1
   m_Mirror: 0
   m_SpeedParameterActive: 0
@@ -314,7 +314,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Patroling_State
-  m_Speed: 2
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7521044240824495201}
@@ -322,7 +322,7 @@ AnimatorState:
   m_StateMachineBehaviours:
   - {fileID: 1201199309304391293}
   m_Position: {x: 50, y: 50, z: 0}
-  m_IKOnFeet: 0
+  m_IKOnFeet: 1
   m_WriteDefaultValues: 1
   m_Mirror: 0
   m_SpeedParameterActive: 0
@@ -460,7 +460,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Attack_State
-  m_Speed: 2
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -8099196864233421569}
@@ -531,8 +531,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa2b70c16d16a354e895419b93e1c3dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombiechaseState
-  chaseSpeed: 3
-  stopChasingDistance: 20
+  chaseSpeed: 2.5
+  stopChasingDistance: 10
   attackingDistance: 2
 --- !u!1101 &6107295465570459233
 AnimatorStateTransition:
