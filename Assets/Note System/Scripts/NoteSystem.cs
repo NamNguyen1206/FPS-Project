@@ -5,17 +5,23 @@ public class NoteSystem : MonoBehaviour
 {
     [Header("Note Content")]
     [TextArea(5, 10)]
-    public string noteContent;
+    public string[] notePages;
 
     [Header("UI")]
     [SerializeField] private GameObject notePanel;
     [SerializeField] private TextMeshProUGUI noteText;
     [SerializeField] private GameObject interactionText;
+    [SerializeField] private GameObject nextButton;
+    [SerializeField] private GameObject previousButton;
 
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip openSound;
     [SerializeField] private AudioClip closeSound;
+
+    //added Part 2
+    public AudioClip nextPageSounds;
+    private int currentPage = 0;
 
     [Header("Settings")]
     [SerializeField] private bool destroyAfterReading = true;
@@ -30,7 +36,8 @@ public class NoteSystem : MonoBehaviour
         isReading = true;
 
         notePanel.SetActive(true);
-        noteText.text = noteContent;
+        currentPage = 0;
+        ShowCurrentPage();
 
         if (interactionText != null)
             interactionText.SetActive(false);
@@ -70,6 +77,40 @@ public class NoteSystem : MonoBehaviour
         if (destroyAfterReading)
         {
             Destroy(gameObject);
+        }
+    }
+
+    private void ShowCurrentPage()
+    {
+        if (notePages.Length == 0)
+            return;
+
+        noteText.text = notePages[currentPage];
+
+        previousButton.SetActive(currentPage > 0);
+        nextButton.SetActive(currentPage < notePages.Length - 1);
+    }
+    
+    public void NextPage()
+    {
+        if (currentPage < notePages.Length - 1)
+        {
+            currentPage++;
+            ShowCurrentPage();
+
+            if (audioSource != null && nextPageSounds != null)
+                audioSource.PlayOneShot(nextPageSounds);
+        }
+    }
+    public void PreviousPage()
+    {
+        if (currentPage > 0)
+        {
+            currentPage--;
+            ShowCurrentPage();
+
+            if (audioSource != null && nextPageSounds != null)
+                audioSource.PlayOneShot(nextPageSounds);
         }
     }
 }

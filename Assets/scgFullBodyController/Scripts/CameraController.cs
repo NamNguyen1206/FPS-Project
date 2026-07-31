@@ -11,6 +11,7 @@ namespace scgFullBodyController
         public float maxPitch = 60f;
         public Transform parent;
         public Transform boneParent;
+        //public bool canRotate = true;
 
         private float pitch = 0f;
         [HideInInspector] public float yaw = 0f;
@@ -24,6 +25,12 @@ namespace scgFullBodyController
 
         void LateUpdate()
         {
+            // Debug.Log("TimeScale = " + Time.timeScale);
+            if (Time.timeScale == 0f)
+            return;
+            // if (!canRotate)
+            // return;
+
             CameraRotate();
             transform.position = boneParent.position;
         }
@@ -37,5 +44,21 @@ namespace scgFullBodyController
             pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
             transform.eulerAngles = new Vector3(pitch, yaw, 0f);
         }
+//         void CameraRotate()
+// {
+//     float mouseX = Input.GetAxis("Mouse X");
+//     //Debug.Log($"mouseX={mouseX} yaw={yaw}");
+//     float mouseY = Input.GetAxis("Mouse Y");
+
+//     Debug.Log($"MouseX = {mouseX}, MouseY = {mouseY}");
+
+//     relativeYaw = mouseX * Sensitivity;
+//     pitch -= mouseY * Sensitivity;
+//     yaw += mouseX * Sensitivity;
+
+//     pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
+
+//     transform.eulerAngles = new Vector3(pitch, yaw, 0f);
+// }
     }
 }

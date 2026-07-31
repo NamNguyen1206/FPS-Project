@@ -11,6 +11,8 @@ namespace scgFullBodyController
         // Update is called once per frame
         void LateUpdate()
         {
+            if (Time.timeScale == 0f)
+                return;
             spineToOrientate.rotation = transform.rotation;
         }
     }
