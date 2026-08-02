@@ -11,7 +11,7 @@ namespace NavKeypad
         [Header("Events")]
         [SerializeField] private UnityEvent onAccessGranted;
         [SerializeField] private UnityEvent onAccessDenied;
-        [Header("Combination Code (9 Numbers Max)")]
+        [Header("Combination Code (6 Numbers Max)")]
         [SerializeField] private int keypadCombo = 12345;
 
         public UnityEvent OnAccessGranted => onAccessGranted;
@@ -61,7 +61,7 @@ namespace NavKeypad
                     CheckCombo();
                     break;
                 default:
-                    if (currentInput != null && currentInput.Length == 9) // 9 max passcode size 
+                    if (currentInput != null && currentInput.Length == 6) // 6 max passcode size 
                     {
                         return;
                     }

@@ -4,6 +4,9 @@ public class KeyPickup : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
+        // [Header("Mission")]
+        // [SerializeField]  string missionTitle = "MISSION UPDATED";
+        // [SerializeField]  string missionDescription = "Find the Exit";
         if (other.CompareTag("Player"))
         {
             KeyInventory inventory =
