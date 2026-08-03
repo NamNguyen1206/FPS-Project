@@ -554,7 +554,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa2b70c16d16a354e895419b93e1c3dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombiechaseState
-  chaseSpeed: 2.5
+  chaseSpeed: 2.25
   stopChasingDistance: 10
   attackingDistance: 2
 --- !u!1101 &6107295465570459233

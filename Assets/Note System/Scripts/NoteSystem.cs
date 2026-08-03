@@ -19,6 +19,9 @@ public class NoteSystem : MonoBehaviour
     [SerializeField] private AudioClip openSound;
     [SerializeField] private AudioClip closeSound;
 
+    [Header("Player")]
+    [SerializeField] private GameObject playerModel;
+
     //added Part 2
     public AudioClip nextPageSounds;
     private int currentPage = 0;
@@ -45,6 +48,10 @@ public class NoteSystem : MonoBehaviour
         if (audioSource != null && openSound != null)
             audioSource.PlayOneShot(openSound);
 
+        // Ẩn model player
+        if (playerModel != null)
+            playerModel.SetActive(false);
+
         // Pause game
         Time.timeScale = 0f;
         PauseMenu.isPaused = true;
@@ -65,6 +72,10 @@ public class NoteSystem : MonoBehaviour
 
         if (audioSource != null && closeSound != null)
             audioSource.PlayOneShot(closeSound);
+    
+        // Hiện lại model player
+        if (playerModel != null)
+            playerModel.SetActive(true);
 
         // Resume game
         Time.timeScale = 1f;

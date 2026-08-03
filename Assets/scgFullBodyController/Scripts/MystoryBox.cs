@@ -15,7 +15,7 @@ public class MystoryBox : MonoBehaviour
     [SerializeField] private float keyOutDelay = 0.5f;
     [SerializeField] private float closeDelay = 0.8f;
 
-    private bool playerInRange;
+    //private bool playerInRange;
     private bool isBusy;
     private bool isOpened;
 
@@ -96,7 +96,7 @@ public class MystoryBox : MonoBehaviour
     {
         if (other.CompareTag(playerTag))
         {
-            playerInRange = true;
+            //playerInRange = true;
             Debug.Log("Player entered box trigger");
         }
     }
@@ -105,7 +105,7 @@ public class MystoryBox : MonoBehaviour
     {
         if (other.CompareTag(playerTag))
         {
-            playerInRange = false;
+            //playerInRange = false;
             Debug.Log("Player exited box trigger");
         }
     }

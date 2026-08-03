@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class KeyPickup : MonoBehaviour
 {
+    [Header("Audio")]
+    [SerializeField] private AudioClip pickupSound;
+
+    [SerializeField] [Range(0f, 1f)] private float pickupVolume = 0.7f;
+
     private void OnTriggerEnter(Collider other)
     {
-        // [Header("Mission")]
-        // [SerializeField]  string missionTitle = "MISSION UPDATED";
-        // [SerializeField]  string missionDescription = "Find the Exit";
         if (other.CompareTag("Player"))
         {
             KeyInventory inventory =
@@ -17,6 +19,15 @@ public class KeyPickup : MonoBehaviour
                 inventory.hasKey = true;
 
                 Debug.Log("Hangar Key Collected!");
+                // Phát âm thanh
+                if (pickupSound != null)
+                {
+                    AudioSource.PlayClipAtPoint(
+                        pickupSound,
+                        transform.position,
+                        pickupVolume
+                    );
+                }
 
                 Destroy(gameObject);
             }

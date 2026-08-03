@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1387003432610644957}
   - component: {fileID: 1984808409268823470}
   - component: {fileID: 1981195529771301327}
+  - component: {fileID: 4291877395866748723}
   m_Layer: 0
   m_Name: key
   m_TagString: Untagged
@@ -129,9 +130,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::scgFullBodyController.Outline
-  outlineMode: 0
+  outlineMode: 1
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
+  outlineWidth: 6
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
@@ -170,6 +171,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f74a4d4c9883ad443b07bb0f65f019a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KeyPickup
+  pickupSound: {fileID: 8300000, guid: 46dd0fd557ce6ea47b620393eb1783df, type: 3}
+  pickupVolume: 0.7
 --- !u!95 &1981195529771301327
 Animator:
   serializedVersion: 7
@@ -192,3 +195,17 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4291877395866748723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3448396079189626616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36b7b34a3561a7f4abe48b06754d6051, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MissionCompleteTrigger
+  missionTitle: MISSION UPDATE
+  missionDescription: 'SAVE THE SCIENTIST '

@@ -4,6 +4,11 @@ using scgFullBodyController;
 public class ArmorPickup : MonoBehaviour
 {
     [SerializeField] private float armorAmount = 50f;
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip pickupSound;
+    [SerializeField] [Range(0f,1f)] private float pickupVolume = 0.5f;
+
     private bool collected = false;
 
     private void OnTriggerEnter(Collider other)
@@ -15,6 +20,8 @@ public class ArmorPickup : MonoBehaviour
         {
             health.AddArmor(armorAmount);
             collected = true;
+            // Phát âm thanh
+            AudioSource.PlayClipAtPoint(pickupSound, transform.position, pickupVolume);
             gameObject.SetActive(false);
         }
     }

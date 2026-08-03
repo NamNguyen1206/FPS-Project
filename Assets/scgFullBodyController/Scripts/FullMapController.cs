@@ -11,6 +11,7 @@ public class FullMapController : MonoBehaviour
 
     private bool mapOpened = false;
     public CameraController cameraController;
+    public GameObject playerModel;
 
     void Start()
     {
@@ -27,6 +28,8 @@ public class FullMapController : MonoBehaviour
 
             if (miniMap != null)
                 miniMap.SetActive(!mapOpened);
+            if (playerModel != null)
+                playerModel.SetActive(!mapOpened);
 
             //cameraController.enabled = !mapOpened;
             Time.timeScale = mapOpened ? 0 : 1;

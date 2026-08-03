@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private GameObject pauseMenuUI;
+    public GameObject playerModel;
     public static bool isPaused;
 
     void Start()
@@ -29,7 +30,9 @@ public class PauseMenu : MonoBehaviour
     private void Pause()
     {
         if (pauseMenuUI != null)
-        pauseMenuUI.SetActive(true);        
+        pauseMenuUI.SetActive(true);  
+        if (playerModel != null)
+        playerModel.SetActive(false);      
         Time.timeScale = 0f;
         isPaused = true;
         Cursor.lockState = CursorLockMode.None;
@@ -39,6 +42,8 @@ public class PauseMenu : MonoBehaviour
     {
         if (pauseMenuUI != null)
             pauseMenuUI.SetActive(false);
+        if (playerModel != null)
+            playerModel.SetActive(true);
         Time.timeScale = 1f;
         isPaused = false;
         Cursor.lockState = CursorLockMode.Locked;
