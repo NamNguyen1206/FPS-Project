@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class NoteSystem : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class NoteSystem : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private GameObject notePanel;
-    [SerializeField] private TextMeshProUGUI noteText;
+    [SerializeField] private Text noteText;
     [SerializeField] private GameObject interactionText;
     [SerializeField] private GameObject nextButton;
     [SerializeField] private GameObject previousButton;

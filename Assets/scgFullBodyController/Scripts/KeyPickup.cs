@@ -4,33 +4,74 @@ public class KeyPickup : MonoBehaviour
 {
     [Header("Audio")]
     [SerializeField] private AudioClip pickupSound;
-
     [SerializeField] [Range(0f, 1f)] private float pickupVolume = 0.7f;
+//  [SerializeField] private ObjectiveMarker objectiveMarker;
 
-    private void OnTriggerEnter(Collider other)
+    private bool collected = false;
+
+    // private void OnTriggerEnter(Collider other)
+    // {
+    //     if (other.CompareTag("Player"))
+    //     {
+    //         KeyInventory inventory =
+    //             other.GetComponent<KeyInventory>();
+
+    //         if (inventory != null)
+    //         {
+    //             inventory.hasKey = true;
+
+    //             Debug.Log("Hangar Key Collected!");
+    //             // Phát âm thanh
+    //             if (pickupSound != null)
+    //             {
+    //                 AudioSource.PlayClipAtPoint(
+    //                     pickupSound,
+    //                     transform.position,
+    //                     pickupVolume
+    //                 );
+    //             }
+
+    //             Destroy(gameObject);
+    //         }
+    //     }
+    // }
+    public void Interact()
     {
-        if (other.CompareTag("Player"))
+        if (collected)
+            return;
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+        if (player == null)
+            return;
+
+        KeyInventory inventory = player.GetComponent<KeyInventory>();
+
+        if (inventory != null)
         {
-            KeyInventory inventory =
-                other.GetComponent<KeyInventory>();
+            inventory.hasKey = true;
 
-            if (inventory != null)
+            if (ObjectiveManager.Instance != null)
             {
-                inventory.hasKey = true;
-
-                Debug.Log("Hangar Key Collected!");
-                // Phát âm thanh
-                if (pickupSound != null)
-                {
-                    AudioSource.PlayClipAtPoint(
-                        pickupSound,
-                        transform.position,
-                        pickupVolume
-                    );
-                }
-
-                Destroy(gameObject);
+                ObjectiveManager.Instance.npcMarker.SetActive(true);
+                Debug.Log(ObjectiveManager.Instance.npcMarker.name);
+                Debug.Log(ObjectiveManager.Instance.npcMarker.activeSelf);
             }
+
+            collected = true;
+
+            Debug.Log("Hangar Key Collected!");
+
+            if (pickupSound != null)
+            {
+                AudioSource.PlayClipAtPoint(
+                    pickupSound,
+                    transform.position,
+                    pickupVolume
+                );
+            }
+
+            Destroy(gameObject);
         }
     }
 }

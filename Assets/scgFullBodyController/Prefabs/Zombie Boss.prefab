@@ -275,6 +275,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -1781356600409242780, guid: aa44a093ff094144f9fa337d3df77f27,
+        type: 3}
+      propertyPath: m_TagString
+      value: Head
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: aa44a093ff094144f9fa337d3df77f27,
         type: 3}
       propertyPath: m_Name
@@ -340,6 +345,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3641939107872503781}
+    - targetCorrespondingSourceObject: {fileID: -1781356600409242780, guid: aa44a093ff094144f9fa337d3df77f27,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4445426120705356141}
   m_SourcePrefab: {fileID: 100100000, guid: aa44a093ff094144f9fa337d3df77f27, type: 3}
 --- !u!1 &2499825472332658395 stripped
 GameObject:
@@ -389,9 +398,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.21671319
-  m_Height: 1.9688863
+  m_Height: 1.6221683
   m_Direction: 1
-  m_Center: {x: -0.00680995, y: 0.9878822, z: 0}
+  m_Center: {x: -0.00680995, y: 0.8145232, z: 0}
 --- !u!54 &1999708279804666018
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -618,3 +627,30 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3346249102472072074}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5275714387118524654 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -1781356600409242780, guid: aa44a093ff094144f9fa337d3df77f27,
+    type: 3}
+  m_PrefabInstance: {fileID: 3346249102472072074}
+  m_PrefabAsset: {fileID: 0}
+--- !u!135 &4445426120705356141
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5275714387118524654}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.16642058
+  m_Center: {x: 0.0006186068, y: -0.0015484543, z: 0.03152216}

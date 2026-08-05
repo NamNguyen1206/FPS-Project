@@ -345,7 +345,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombiepatrolingState
   patrolingTime: 30
-  detectionArea: 8
+  detectionArea: 10
   patrolspeed: 0.5
 --- !u!1101 &1808980858999111809
 AnimatorStateTransition:
@@ -499,7 +499,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombiechaseState
   chaseSpeed: 2.25
-  stopChasingDistance: 10
+  stopChasingDistance: 12
   attackingDistance: 2
 --- !u!1101 &6107295465570459233
 AnimatorStateTransition:

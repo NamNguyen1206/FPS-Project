@@ -3,6 +3,10 @@ using UnityEngine.AI;
 
 public class NPCFollow : MonoBehaviour
 {
+    [Header("Zombie Spawn")]
+    public GameObject zombieSpawnObject;
+    private bool hasActivatedSpawn = false;
+
     private NavMeshAgent agent;
     private Animator animator;
 
@@ -43,6 +47,12 @@ public class NPCFollow : MonoBehaviour
             }
             else
             {
+            // Kích hoạt Zombie Spawn
+            if (!hasActivatedSpawn && zombieSpawnObject != null)
+            {
+                zombieSpawnObject.SetActive(true);
+                hasActivatedSpawn = true;
+            }
                 Debug.Log("NPC Start Following");
             }
         }

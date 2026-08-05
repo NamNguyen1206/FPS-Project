@@ -61,6 +61,7 @@ public class ZombieController : MonoBehaviour
     
     public void TakeDamage(int damageAmount)
     {
+        //Debug.Log("TakeDamage received = " + damageAmount);
         if (isDead)
         return;
 

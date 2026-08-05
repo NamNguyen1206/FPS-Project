@@ -20,6 +20,7 @@ TagManager:
   - Ground
   - Zombie
   - NPC
+  - Head
   layers:
   - Default
   - TransparentFX

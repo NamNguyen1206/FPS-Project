@@ -15,8 +15,8 @@ namespace scgFullBodyController
 
         void OnCollisionEnter(Collision col)
         {
-            //Debug.Log("Hit Object = " + col.transform.name);
-            //Debug.Log("Hit Tag = " + col.transform.tag);
+            //Debug.Log("Hit Object = " + col.collider.name);
+            //Debug.Log("Hit Tag = " + col.collider.tag);
             ExplosiveBarrel explosiveBarrel = col.transform.GetComponentInParent<ExplosiveBarrel>();
 
             if (explosiveBarrel != null)
@@ -41,23 +41,31 @@ namespace scgFullBodyController
                 tempImpact.transform.Rotate(Vector3.left * 90);
                 Destroy(tempImpact, impactDespawnTime);
             }
-            else if (col.transform.CompareTag("Zombie"))
+            else if (col.transform.CompareTag("Zombie") || col.collider.CompareTag("Head"))
             {
-                //ZombieController zombie = col.transform.root.GetComponent<ZombieController>();
-                //Debug.Log("Zombie Controller = " + zombie);
-                //Debug.Log("Hit Object = " + col.transform.name);
+            //ZombieController zombie = col.transform.root.GetComponent<ZombieController>();
 
-            ZombieController zombie = col.transform.GetComponent<ZombieController>();
-            //Debug.Log("GetComponent = " + zombie);
+            //ZombieController zombie = col.transform.GetComponent<ZombieController>();
+            ZombieController zombie = col.collider.GetComponentInParent<ZombieController>();
             ZombieController zombieParent = col.transform.GetComponentInParent<ZombieController>();
-            //Debug.Log("GetComponentInParent = " + zombieParent);
             ZombieController zombieRoot = col.transform.root.GetComponent<ZombieController>();
-            //Debug.Log("Root = " + zombieRoot);
 
             if (zombie != null)
             {
-                zombie.TakeDamage(damage);
+                //Debug.Log("Transform Name = " + col.collider.name);
+                //Debug.Log("Transform Tag = " + col.collider.tag);
+                //Debug.Log("CompareTag Head = " + col.collider.CompareTag("Head"));
+
+                int finalDamage = damage;
+
+                if (col.collider.CompareTag("Head"))
+                {
+                    finalDamage *= 2;
+                    Debug.Log("HEADSHOT!");
                 }
+
+                zombie.TakeDamage(finalDamage);
+            }
 
                 GameObject tempImpact =
                 Instantiate(impactBloodParticle,
