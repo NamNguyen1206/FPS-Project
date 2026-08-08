@@ -15,8 +15,6 @@ namespace scgFullBodyController
 
         void OnCollisionEnter(Collision col)
         {
-            //Debug.Log("Hit Object = " + col.collider.name);
-            //Debug.Log("Hit Tag = " + col.collider.tag);
             ExplosiveBarrel explosiveBarrel = col.transform.GetComponentInParent<ExplosiveBarrel>();
 
             if (explosiveBarrel != null)
@@ -27,7 +25,7 @@ namespace scgFullBodyController
             }
 
             //If we (the bullet) hit the col object check for Player tag
-            if (col.transform.tag == "Enemy" || col.transform.tag == "Player")
+            if (col.transform.tag == "Enemy" || col.transform.tag == "Player" || col.transform.CompareTag("NPC"))
             {
                 //If the root object we hit has a healthcontroller then apply damage
                 if (col.transform.root.gameObject.GetComponent<HealthController>())
@@ -43,19 +41,12 @@ namespace scgFullBodyController
             }
             else if (col.transform.CompareTag("Zombie") || col.collider.CompareTag("Head"))
             {
-            //ZombieController zombie = col.transform.root.GetComponent<ZombieController>();
-
-            //ZombieController zombie = col.transform.GetComponent<ZombieController>();
             ZombieController zombie = col.collider.GetComponentInParent<ZombieController>();
             ZombieController zombieParent = col.transform.GetComponentInParent<ZombieController>();
             ZombieController zombieRoot = col.transform.root.GetComponent<ZombieController>();
 
             if (zombie != null)
             {
-                //Debug.Log("Transform Name = " + col.collider.name);
-                //Debug.Log("Transform Tag = " + col.collider.tag);
-                //Debug.Log("CompareTag Head = " + col.collider.CompareTag("Head"));
-
                 int finalDamage = damage;
 
                 if (col.collider.CompareTag("Head"))

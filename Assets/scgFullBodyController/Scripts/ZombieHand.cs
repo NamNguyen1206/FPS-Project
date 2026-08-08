@@ -18,23 +18,25 @@ public class ZombieHand : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //Debug.Log("Trigger Enter: " + other.name);
+        //Debug.Log("ZombieHand OnTriggerEnter: " + other.name);
         TryDamageTarget(other.transform);
     }
 
     private void OnTriggerStay(Collider other)
     {
-        //Debug.Log("Trigger Stay: " + other.name);
+        //Debug.Log("ZombieHand OnTriggerStay: " + other.name);
         TryDamageTarget(other.transform);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        //Debug.Log("ZombieHand OnCollisionEnter: " + collision.gameObject.name);
         TryDamageTarget(collision.transform);
     }
 
     private void OnCollisionStay(Collision collision)
     {
+        //Debug.Log("ZombieHand OnCollisionStay: " + collision.gameObject.name);
         TryDamageTarget(collision.transform);
     }
 
@@ -54,7 +56,36 @@ public class ZombieHand : MonoBehaviour
         {
             return;
         }
+        Debug.Log(
+        "ZombieHand HIT: " + hitTransform.name +
+        " | Root: " + targetRoot.name +
+        " | Tag: " + hitTransform.tag +
+        " | Root Tag: " + targetRoot.tag
+        );
 
+        // =========================
+        // NPC
+        // =========================
+
+        if (targetRoot.CompareTag("NPC"))
+        {
+            NPCFollow npc = targetRoot.GetComponent<NPCFollow>();
+
+            if (npc != null)
+            {
+                npc.TakeDamage(damage);
+                nextDamageTime = Time.time + damageCooldown;
+            }
+
+             return;
+        }
+
+        // =========================
+        // PLAYER
+        // =========================
+
+        if (targetRoot.CompareTag("Player"))
+        {
         HealthController healthController = targetRoot.GetComponent<HealthController>();
 
         if (healthController == null)
@@ -64,6 +95,7 @@ public class ZombieHand : MonoBehaviour
 
         healthController.Damage(damage);
         nextDamageTime = Time.time + damageCooldown;
+        }
     }
 
     private bool CanDamage()
