@@ -252,11 +252,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9961706a3b9a2ec41b2d4a9b463ccc7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ThrowingGrenate
-  exoplosionEffectPrefab: {fileID: 100004, guid: b46890100828db6429ff69c322b45893,
+  exoplosionEffectPrefab: {fileID: 100006, guid: 93485fd5fc2ccf2439cb3239186f6382,
     type: 3}
-  explosionParticalOffset: {x: 0, y: 1, z: 0}
+  explosionParticalOffset: {x: 0, y: 0.5, z: 0}
   audioSourcePrefab: {fileID: 3035765610801205067, guid: b48be5981d8fec2468e42a5ed0bb2189,
     type: 3}
+  damage: 100
   explosionDeley: 3
   explosionForce: 700
   explosionRadius: 5

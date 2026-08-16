@@ -18,19 +18,44 @@ namespace scgFullBodyController
 
         void OnTriggerEnter(Collider col)
         {
+            Animator playerAnimator = transform.root.GetComponent<Animator>();
+            bool isKicking = playerAnimator != null && playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Kick");
+
+            if (!isKicking)
+                return;
+
             //If we hit a player, apply damage to the player transform root object's health controller
-            if (col.transform.tag == "Player" && transform.root.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Kick") && col.transform.root.GetComponent<HealthController>())
+            if (col.CompareTag("Player") && col.transform.root.GetComponent<HealthController>())
             {
                 col.transform.root.GetComponent<HealthController>().DamageByKick(cameraObj.transform.forward * 360, playerKickforce, kickDamage);
-                gameObject.GetComponent<AudioSource>().PlayOneShot(kickSound);
+                PlayKickSound();
+            }
+
+            // Damage the zombie root, even when the kick hits one of its child colliders.
+            ZombieController zombie = col.GetComponentInParent<ZombieController>();
+            if (zombie != null)
+            {
+                zombie.TakeDamage(kickDamage);
+                PlayKickSound();
             }
 
             //If we hit a door, add force to its rigidbody
-            if (col.transform.tag == "Door" && transform.root.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Kick"))
+            if (col.CompareTag("Door"))
             {
-                col.GetComponent<Rigidbody>().AddForce(cameraObj.transform.forward * 360 * doorKickforce);
-                gameObject.GetComponent<AudioSource>().PlayOneShot(kickSound);
+                Rigidbody doorRigidbody = col.GetComponent<Rigidbody>();
+                if (doorRigidbody != null)
+                {
+                    doorRigidbody.AddForce(cameraObj.transform.forward * 360 * doorKickforce);
+                    PlayKickSound();
+                }
             }
+        }
+
+        private void PlayKickSound()
+        {
+            AudioSource audioSource = GetComponent<AudioSource>();
+            if (audioSource != null && kickSound != null)
+                audioSource.PlayOneShot(kickSound);
         }
     }
 }

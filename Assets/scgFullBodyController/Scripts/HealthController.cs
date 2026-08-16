@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,19 +6,27 @@ namespace scgFullBodyController
 {
     public class HealthController : MonoBehaviour
     {
-        //IMPORTANT, this script needs to be on the root transform
-
         [Header("Basics")]
-        public float health;
-        float maxHealth;
+        public float health = 100f;
+
+        private float maxHealth;
+
         public float armor;
-        float maxArmor = 100f;
+
+        private float maxArmor = 100f;
+
+        [Header("Death")]
         public GameObject ragdoll;
         public bool dontSpawnRagdoll;
-        public float deadTime;
-        GameObject tempdoll;
-        bool meleeDeath;
-        public bool isAiOrDummy;
+        public float deadTime = 10f;
+
+        [Header("Character Type")]
+        public bool isAiOrDummy = false;
+
+        private bool isDead = false;
+        private bool meleeDeath = false;
+
+        private GameObject tempdoll;
 
         [Header("Sound")]
         public bool playNoiseOnHurt;
@@ -30,204 +36,470 @@ namespace scgFullBodyController
         [Header("Regen")]
         public bool regen;
         public float timeBeforeRegen;
-        float origTimeBeforeRegen;
+        private float origTimeBeforeRegen;
         public float regenSpeed;
-        bool alreadyRegenning;
+        private bool alreadyRegenning;
 
-        void Start()
+        // =========================
+        // NPC
+        // =========================
+
+        private NPCFollow npcFollow;
+
+        // =========================
+        // UNITY
+        // =========================
+
+        private void Awake()
         {
-            //Get a reference to the original reset time
-            origTimeBeforeRegen = timeBeforeRegen;
-
-            //Set maxHealth to what our max is at start of the scene
-            maxHealth = health;
-            armor = 0f;
+            // Nếu HealthController nằm trên NPC
+            npcFollow = GetComponent<NPCFollow>();
         }
 
-        void Update()
+        private void Start()
         {
-            //If health is low enough and we are not kicked to death, then die normally
+            // Lưu HP ban đầu
+            maxHealth = health;
+
+            origTimeBeforeRegen = timeBeforeRegen;
+
+            armor = Mathf.Clamp(armor, 0f, maxArmor);
+        }
+
+        private void Update()
+        {
+            if (isDead)
+                return;
+
+            // Nếu HP <= 0
             if (health <= 0)
             {
                 if (!meleeDeath)
+                {
                     Die();
+                }
+
+                return;
             }
 
-            //Only update HUD text if we are a player
-            if (!isAiOrDummy)
+            // =========================
+            // PLAYER HUD
+            // =========================
+
+            if (!isAiOrDummy && npcFollow == null)
             {
                 GameObject ui = GameObject.FindGameObjectWithTag("hud");
-                hudController hud = ui != null ? ui.GetComponent<hudController>() : null;
 
-                if (hud != null && health > 0)
+                hudController hud =
+                    ui != null
+                        ? ui.GetComponent<hudController>()
+                        : null;
+
+                if (hud != null)
                 {
                     hud.SetHealth(health, maxHealth);
                     hud.SetArmor(armor);
                 }
-                else if (hud != null)
-                {
-                    hud.SetHealth(0, maxHealth);
-                    hud.SetArmor(0);
-                }
             }
 
+            // =========================
+            // STOP REGEN
+            // =========================
 
-            //Check if we are done regenning and stop
-            if (health == maxHealth && regen && alreadyRegenning)
+            if (health >= maxHealth && regen && alreadyRegenning)
             {
                 alreadyRegenning = false;
-                StopCoroutine("regenHealth");
-            }
 
+                StopCoroutine(nameof(regenHealth));
+            }
         }
+
+        // ============================================================
+        // DAMAGE
+        // ============================================================
 
         public void Damage(float damage)
         {
-            //If we are a player, take damage, otherwise (AI), apply the hit animation and attack the player
+            if (isDead)
+                return;
+
+            if (damage <= 0)
+                return;
+
+            // ========================================================
+            // NPC
+            // ========================================================
+
+            if (npcFollow != null)
+            {
+                health -= damage;
+
+                Debug.Log(
+                    $"NPC [{name}] took {damage} damage. " +
+                    $"HP: {health}/{maxHealth}"
+                );
+
+                // NPC chết
+                if (health <= 0)
+                {
+                    health = 0;
+
+                    Die();
+                }
+
+                RestartRegen();
+
+                return;
+            }
+
+            // ========================================================
+            // PLAYER
+            // ========================================================
+
             if (!isAiOrDummy)
             {
                 if (armor > 0)
                 {
                     armor = Mathf.Max(armor - 20f, 0f);
-                    Debug.Log($"{name} armor: {armor}");
+
+                    Debug.Log(
+                        $"{name} armor: {armor}"
+                    );
                 }
                 else
                 {
                     health -= damage;
                 }
 
-                if (playNoiseOnHurt)
-                {
-                    if (Random.value < percentageToPlay)
-                    {
-                        GetComponent<AudioSource>().PlayOneShot(hurtNoise);
-                    }
-                }
+                PlayHurtSound();
+
+                RestartRegen();
+
+                return;
             }
-            else
+
+            // ========================================================
+            // AI / DUMMY
+            // ========================================================
+
+            health -= damage;
+
+            Animator aiAnimator = GetComponent<Animator>();
+
+            if (aiAnimator != null)
             {
-                health -= damage;
-                GetComponent<Animator>().SetTrigger("hit");
-
-                if (gameObject.GetComponent<AiController>())
-                    gameObject.GetComponent<AiController>().overrideAttack = true;
-
-                if (playNoiseOnHurt)
-                {
-                    if (Random.value < percentageToPlay)
-                    {
-                        GetComponent<AudioSource>().PlayOneShot(hurtNoise);
-                    }
-                }
-
+                aiAnimator.SetTrigger("hit");
             }
 
-            //If we are allowed to regen, start gaining health
-            if (regen)
+            AiController aiController =
+                GetComponent<AiController>();
+
+            if (aiController != null)
             {
-                timeBeforeRegen = origTimeBeforeRegen;
-                StopCoroutine("regenHealth");
-                CancelInvoke();
-                if (timeBeforeRegen == origTimeBeforeRegen)
-                {
-                    alreadyRegenning = true;
-                    Invoke(nameof(regenEnumeratorStart), timeBeforeRegen);
-                }
+                aiController.overrideAttack = true;
             }
+
+            PlayHurtSound();
+
+            RestartRegen();
         }
 
-        void regenEnumeratorStart()
+        // ============================================================
+        // REGEN
+        // ============================================================
+
+        private void RestartRegen()
         {
-            StartCoroutine("regenHealth");
+            if (!regen)
+                return;
+
+            timeBeforeRegen = origTimeBeforeRegen;
+
+            StopCoroutine(nameof(regenHealth));
+
+            CancelInvoke();
+
+            alreadyRegenning = true;
+
+            Invoke(
+                nameof(regenEnumeratorStart),
+                timeBeforeRegen
+            );
         }
+
+        private void regenEnumeratorStart()
+        {
+            if (isDead)
+                return;
+
+            StartCoroutine(nameof(regenHealth));
+        }
+
+        private IEnumerator regenHealth()
+        {
+            while (!isDead && health < maxHealth)
+            {
+                health++;
+
+                if (health > maxHealth)
+                    health = maxHealth;
+
+                yield return new WaitForSeconds(regenSpeed);
+            }
+
+            alreadyRegenning = false;
+        }
+
+        // ============================================================
+        // ARMOR
+        // ============================================================
 
         public void AddArmor(float amount)
         {
-            armor = Mathf.Min(armor + amount, maxArmor);
-            Debug.Log($"{name} armor: {armor}");
+            armor = Mathf.Min(
+                armor + amount,
+                maxArmor
+            );
+
+            Debug.Log(
+                $"{name} armor: {armor}"
+            );
         }
 
-        IEnumerator regenHealth()
+        // ============================================================
+        // HURT SOUND
+        // ============================================================
+
+        private void PlayHurtSound()
         {
-            //Only regen while under max health and gain 1 health every regenSpeed seconds
-            while (health < maxHealth)
+            if (!playNoiseOnHurt)
+                return;
+
+            if (hurtNoise == null)
+                return;
+
+            if (Random.value >= percentageToPlay)
+                return;
+
+            AudioSource audioSource =
+                GetComponent<AudioSource>();
+
+            if (audioSource != null)
             {
-                health++;
-                yield return new WaitForSeconds(regenSpeed);
+                audioSource.PlayOneShot(hurtNoise);
             }
         }
 
-        void Die()
+        // ============================================================
+        // DIE
+        // ============================================================
+
+        private void Die()
         {
-            //Only spawn ragdoll if option is selected
+            if (isDead)
+                return;
+
+            isDead = true;
+
+            Debug.Log(
+                $"{name} died."
+            );
+
+            // ========================================================
+            // NPC
+            // ========================================================
+
+            if (npcFollow != null)
+            {
+                npcFollow.DieFromHealthController();
+
+                return;
+            }
+
+            // ========================================================
+            // AI / PLAYER
+            // ========================================================
+
             if (!dontSpawnRagdoll)
             {
-                //Spawn ragdoll and destroy us
-                tempdoll = Instantiate(ragdoll, this.transform.position, this.transform.rotation) as GameObject;
+                if (ragdoll == null)
+                {
+                    Debug.LogWarning(
+                        $"{name}: Ragdoll is not assigned!"
+                    );
 
-                //Tell the ragdoll if we are a player or not so it knows to move our camera or not to the ragdoll
-                tempdoll.GetComponent<ragdollCamera>().isAi = isAiOrDummy;
+                    Destroy(gameObject, deadTime);
+
+                    return;
+                }
+
+                tempdoll = Instantiate(
+                    ragdoll,
+                    transform.position,
+                    transform.rotation
+                );
+
+                ragdollCamera ragdollCam =
+                    tempdoll.GetComponent<ragdollCamera>();
+
+                if (ragdollCam != null)
+                {
+                    ragdollCam.isAi = isAiOrDummy;
+                }
+
                 Destroy(gameObject);
 
-                //Destroy ragdoll if we are an AI after deadTime seconds
                 if (isAiOrDummy)
-                    Destroy(tempdoll, deadTime);
+                {
+                    Destroy(
+                        tempdoll,
+                        deadTime
+                    );
+                }
             }
             else if (isAiOrDummy)
             {
-                //If we aren't spawning a ragdoll, then disable all important scripts on us and destroy after deadtime seconds
-                //This feature is for AI with the ragdoll built in for a more realistic death
-                if (gameObject.GetComponent<Animator>())
-                    gameObject.GetComponent<Animator>().enabled = false;
+                DisableAI();
 
-                if (gameObject.GetComponent<AiController>())
-                    gameObject.GetComponent<AiController>().enabled = false;
-
-                if (gameObject.GetComponent<HealthController>())
-                    gameObject.GetComponent<HealthController>().enabled = false;
-
-                if (gameObject.GetComponent<SimpleFootsteps>())
-                    gameObject.GetComponent<SimpleFootsteps>().enabled = false;
-
-                if (gameObject.GetComponent<NavMeshAgent>())
-                    gameObject.GetComponent<NavMeshAgent>().enabled = false;
-
-                if (gameObject.GetComponentInChildren<OffsetRotation>())
-                    gameObject.GetComponentInChildren<OffsetRotation>().enabled = false;
-
-                if (gameObject.GetComponentInChildren<AiGunController>())
-                    gameObject.GetComponentInChildren<AiGunController>().enabled = false;
-
-                if (gameObject.GetComponentInChildren<Adjuster>())
-                    gameObject.GetComponentInChildren<Adjuster>().enabled = false;
-
-                Destroy(gameObject, deadTime);
+                Destroy(
+                    gameObject,
+                    deadTime
+                );
             }
         }
 
-        public void DamageByKick(Vector3 pos, float kickForce, int kickDamage)
+        // ============================================================
+        // DISABLE AI
+        // ============================================================
+
+        private void DisableAI()
         {
-            //Subtract the damage from values passed in by kickSensing
+            Animator animator =
+                GetComponent<Animator>();
+
+            if (animator != null)
+                animator.enabled = false;
+
+            AiController aiController =
+                GetComponent<AiController>();
+
+            if (aiController != null)
+                aiController.enabled = false;
+
+            enabled = false;
+
+            SimpleFootsteps footsteps =
+                GetComponent<SimpleFootsteps>();
+
+            if (footsteps != null)
+                footsteps.enabled = false;
+
+            NavMeshAgent agent =
+                GetComponent<NavMeshAgent>();
+
+            if (agent != null)
+                agent.enabled = false;
+
+            OffsetRotation offsetRotation =
+                GetComponentInChildren<OffsetRotation>();
+
+            if (offsetRotation != null)
+                offsetRotation.enabled = false;
+
+            AiGunController aiGun =
+                GetComponentInChildren<AiGunController>();
+
+            if (aiGun != null)
+                aiGun.enabled = false;
+
+            Adjuster adjuster =
+                GetComponentInChildren<Adjuster>();
+
+            if (adjuster != null)
+                adjuster.enabled = false;
+        }
+
+        // ============================================================
+        // KICK DEATH
+        // ============================================================
+
+        public void DamageByKick(
+            Vector3 pos,
+            float kickForce,
+            int kickDamage)
+        {
+            if (isDead)
+                return;
+
             health -= kickDamage;
 
-            //If kicked enough, then die
             if (health <= 0)
             {
+                health = 0;
+
                 meleeDeath = true;
-                tempdoll = Instantiate(ragdoll, this.transform.position, this.transform.rotation) as GameObject;
-                tempdoll.GetComponent<ragdollCamera>().isAi = isAiOrDummy;
+
+                if (ragdoll == null)
+                {
+                    Die();
+                    return;
+                }
+
+                tempdoll = Instantiate(
+                    ragdoll,
+                    transform.position,
+                    transform.rotation
+                );
+
+                ragdollCamera ragdollCam =
+                    tempdoll.GetComponent<ragdollCamera>();
+
+                if (ragdollCam != null)
+                {
+                    ragdollCam.isAi = isAiOrDummy;
+                }
+
                 Destroy(gameObject);
 
-                foreach (Rigidbody rb in tempdoll.GetComponentsInChildren<Rigidbody>())
+                foreach (
+                    Rigidbody rb
+                    in tempdoll.GetComponentsInChildren<Rigidbody>()
+                )
                 {
-                    rb.AddForce(pos * kickForce);
+                    rb.AddForce(
+                        pos * kickForce
+                    );
                 }
             }
             else
             {
-                //Dont die just play hit anim
-                gameObject.GetComponent<Animator>().SetTrigger("hit");
+                Animator animator =
+                    GetComponent<Animator>();
+
+                if (animator != null)
+                {
+                    animator.SetTrigger("hit");
+                }
             }
+        }
+
+        // ============================================================
+        // PUBLIC INFORMATION
+        // ============================================================
+
+        public bool IsDead()
+        {
+            return isDead;
+        }
+
+        public float GetHealth()
+        {
+            return health;
+        }
+
+        public float GetMaxHealth()
+        {
+            return maxHealth;
         }
     }
 }

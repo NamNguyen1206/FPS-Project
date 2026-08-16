@@ -3,109 +3,193 @@ using scgFullBodyController;
 
 public class ZombieHand : MonoBehaviour
 {
+    [Header("Damage")]
     public int damage = 20;
 
     [SerializeField]
     private float damageCooldown = 1f;
 
     private Animator animator;
+
     private float nextDamageTime;
+
+    // ============================================================
+    // AWAKE
+    // ============================================================
 
     private void Awake()
     {
-        animator = GetComponentInParent<Animator>();
+        animator =
+            GetComponentInParent<Animator>();
     }
+
+    // ============================================================
+    // TRIGGER
+    // ============================================================
 
     private void OnTriggerEnter(Collider other)
     {
-        //Debug.Log("ZombieHand OnTriggerEnter: " + other.name);
-        TryDamageTarget(other.transform);
+        Debug.Log(
+            "ZombieHand OnTriggerEnter: " +
+            other.name
+        );
+
+        TryDamageTarget(
+            other.transform
+        );
     }
 
     private void OnTriggerStay(Collider other)
     {
-        //Debug.Log("ZombieHand OnTriggerStay: " + other.name);
-        TryDamageTarget(other.transform);
+        TryDamageTarget(
+            other.transform
+        );
     }
 
-    private void OnCollisionEnter(Collision collision)
+    // ============================================================
+    // COLLISION
+    // ============================================================
+
+    private void OnCollisionEnter(
+        Collision collision
+    )
     {
-        //Debug.Log("ZombieHand OnCollisionEnter: " + collision.gameObject.name);
-        TryDamageTarget(collision.transform);
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-        //Debug.Log("ZombieHand OnCollisionStay: " + collision.gameObject.name);
-        TryDamageTarget(collision.transform);
-    }
-
-    private void TryDamageTarget(Transform hitTransform)
-    {
-        if (!CanDamage())
-        {
-            return;
-        }
-
-        Transform targetRoot = hitTransform.root;
-
-        if (!hitTransform.CompareTag("Player") &&
-            !hitTransform.CompareTag("NPC") &&
-            !targetRoot.CompareTag("Player") &&
-            !targetRoot.CompareTag("NPC"))
-        {
-            return;
-        }
         Debug.Log(
-        "ZombieHand HIT: " + hitTransform.name +
-        " | Root: " + targetRoot.name +
-        " | Tag: " + hitTransform.tag +
-        " | Root Tag: " + targetRoot.tag
+            "ZombieHand OnCollisionEnter: " +
+            collision.gameObject.name
         );
 
-        // =========================
-        // NPC
-        // =========================
+        TryDamageTarget(
+            collision.transform
+        );
+    }
 
-        if (targetRoot.CompareTag("NPC"))
+    private void OnCollisionStay(
+        Collision collision
+    )
+    {
+        TryDamageTarget(
+            collision.transform
+        );
+    }
+
+    // ============================================================
+    // TRY DAMAGE
+    // ============================================================
+
+    private void TryDamageTarget(
+        Transform hitTransform
+    )
+    {
+        if (hitTransform == null)
+            return;
+
+        // ========================================================
+        // CHECK ATTACK COOLDOWN
+        // ========================================================
+
+        if (!CanDamage())
+            return;
+
+        // ========================================================
+        // KHÔNG ĐÁNH CHÍNH ZOMBIE
+        // ========================================================
+
+        Transform hitRoot =
+            hitTransform.root;
+
+        if (
+            hitRoot.CompareTag("Zombie")
+        )
         {
-            NPCFollow npc = targetRoot.GetComponent<NPCFollow>();
-
-            if (npc != null)
-            {
-                npc.TakeDamage(damage);
-                nextDamageTime = Time.time + damageCooldown;
-            }
-
-             return;
+            return;
         }
 
-        // =========================
-        // PLAYER
-        // =========================
+        // ========================================================
+        // FIND HEALTH CONTROLLER
+        // ========================================================
 
-        if (targetRoot.CompareTag("Player"))
-        {
-        HealthController healthController = targetRoot.GetComponent<HealthController>();
+        HealthController healthController =
+            hitTransform.GetComponentInParent<HealthController>();
 
         if (healthController == null)
         {
+            Debug.Log(
+                "ZombieHand: No HealthController found on " +
+                hitTransform.name
+            );
+
             return;
         }
 
-        healthController.Damage(damage);
-        nextDamageTime = Time.time + damageCooldown;
+        // ========================================================
+        // ALREADY DEAD
+        // ========================================================
+
+        if (healthController.IsDead())
+        {
+            return;
         }
+
+        // ========================================================
+        // CHECK PLAYER / NPC
+        // ========================================================
+
+        bool isPlayer =
+            hitRoot.CompareTag("Player");
+
+        bool isNPC =
+            hitRoot.CompareTag("NPC");
+
+        if (!isPlayer && !isNPC)
+        {
+            return;
+        }
+
+        // ========================================================
+        // DAMAGE
+        // ========================================================
+
+        Debug.Log(
+            "Zombie attacks: " +
+            hitRoot.name +
+            " | Damage: " +
+            damage
+        );
+
+        healthController.Damage(
+            damage
+        );
+
+        // ========================================================
+        // COOLDOWN
+        // ========================================================
+
+        nextDamageTime =
+            Time.time + damageCooldown;
     }
+
+    // ============================================================
+    // CAN DAMAGE
+    // ============================================================
 
     private bool CanDamage()
     {
-        //Debug.Log("isAttacking = " + animator.GetBool("isAttacking"));
         if (Time.time < nextDamageTime)
         {
             return false;
         }
 
-        return animator == null || animator.GetBool("isAttacking");
+        // Nếu không lấy được Animator
+        // thì vẫn cho phép damage
+        if (animator == null)
+        {
+            return true;
+        }
+
+        // Chỉ gây damage khi Zombie đang attack
+        return animator.GetBool(
+            "isAttacking"
+        );
     }
 }

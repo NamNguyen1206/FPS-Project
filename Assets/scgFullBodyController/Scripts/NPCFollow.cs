@@ -1,51 +1,91 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections;
 
 public class NPCFollow : MonoBehaviour
 {
     [Header("Zombie Spawn")]
     public GameObject zombieSpawnObject;
+
     private bool hasActivatedSpawn = false;
 
-    [Header("Health")]
-    public float maxHealth = 100f;
-    public float currentHealth;
-    private bool isDead = false;
+    // ============================================================
+    // REFERENCES
+    // ============================================================
 
     private NavMeshAgent agent;
     private Animator animator;
 
+    private bool isDead = false;
+
+    // ============================================================
+    // FOLLOW
+    // ============================================================
+
     [Header("Follow")]
     public GameObject ObjectToFollow;
+
     public bool canFollow = false;
+
+    // ============================================================
+    // ZOMBIE DETECTION
+    // ============================================================
 
     [Header("Zombie Detection")]
     public float detectZombieRadius = 8f;
+
     private bool isTerrified = false;
+
+    // ============================================================
+    // BAD END
+    // ============================================================
 
     [Header("Bad End")]
     public GameObject badEndText;
 
-    void Start()
+    // ============================================================
+    // START
+    // ============================================================
+
+    private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+
         animator = GetComponent<Animator>();
-        // Khởi tạo máu
-        currentHealth = maxHealth;
+
+        if (agent == null)
+        {
+            Debug.LogError(
+                $"NPC [{name}] does not have NavMeshAgent!",
+                this
+            );
+        }
+
+        if (animator == null)
+        {
+            Debug.LogError(
+                $"NPC [{name}] does not have Animator!",
+                this
+            );
+        }
     }
 
-    void Update()
+    // ============================================================
+    // UPDATE
+    // ============================================================
+
+    private void Update()
     {
-        // NPC đã chết thì không xử lý logic nữa
+        // NPC chết thì không xử lý logic nữa
         if (isDead)
             return;
 
         if (ObjectToFollow == null)
             return;
-        //-----------------------
-        // Toggle Follow
-        //-----------------------
+
+        // ========================================================
+        // TOGGLE FOLLOW
+        // ========================================================
 
         if (Input.GetKeyDown(KeyCode.X))
         {
@@ -53,39 +93,54 @@ public class NPCFollow : MonoBehaviour
 
             if (!canFollow)
             {
-                agent.isStopped = true;
+                StopNPC();
+
                 SetAnimation(0);
 
-                Debug.Log("NPC Stop Following");
+                Debug.Log(
+                    "NPC Stop Following"
+                );
             }
             else
             {
-            // Kích hoạt Zombie Spawn
-            if (!hasActivatedSpawn && zombieSpawnObject != null)
-            {
-                zombieSpawnObject.SetActive(true);
-                hasActivatedSpawn = true;
-            }
-                Debug.Log("NPC Start Following");
+                // Kích hoạt Zombie Spawn
+                if (
+                    !hasActivatedSpawn &&
+                    zombieSpawnObject != null
+                )
+                {
+                    zombieSpawnObject.SetActive(true);
+
+                    hasActivatedSpawn = true;
+                }
+
+                Debug.Log(
+                    "NPC Start Following"
+                );
             }
         }
 
-        //-----------------------
-        // Detect Zombie
-        //-----------------------
+        // ========================================================
+        // DETECT ZOMBIE
+        // ========================================================
 
         if (DetectZombie())
         {
-            //Debug.Log("Zombie Detected!");
             if (!isTerrified)
             {
                 isTerrified = true;
 
-                agent.isStopped = true;
+                if (agent != null)
+                {
+                    agent.isStopped = true;
+                }
 
+                // C = 3 → NPC terrified
                 SetAnimation(3);
 
-                Debug.Log("Zombie Detected");
+                Debug.Log(
+                    "NPC Detected Zombie"
+                );
             }
 
             return;
@@ -95,147 +150,246 @@ public class NPCFollow : MonoBehaviour
             if (isTerrified)
             {
                 isTerrified = false;
-                agent.isStopped = false;
 
-                Debug.Log("Zombie Gone");
+                if (agent != null)
+                {
+                    agent.isStopped = false;
+                }
+
+                Debug.Log(
+                    "Zombie Gone"
+                );
             }
         }
 
-        //-----------------------
-        // Follow OFF
-        //-----------------------
+        // ========================================================
+        // FOLLOW OFF
+        // ========================================================
 
         if (!canFollow)
             return;
 
-        float distance = Vector3.Distance(
-            transform.position,
-            ObjectToFollow.transform.position);
+        // ========================================================
+        // CALCULATE DISTANCE
+        // ========================================================
 
-        if (distance < 3)
+        float distance =
+            Vector3.Distance(
+                transform.position,
+                ObjectToFollow.transform.position
+            );
+
+        // ========================================================
+        // STOP
+        // ========================================================
+
+        if (distance < 3f)
         {
-            agent.isStopped = true;
+            if (agent != null)
+            {
+                agent.isStopped = true;
+            }
+
+            // C = 0 → Idle
             SetAnimation(0);
         }
-        else if (distance >= 3 && distance < 10)
-        {
-            agent.isStopped = false;
-            agent.speed = 2;
-            agent.SetDestination(ObjectToFollow.transform.position);
 
+        // ========================================================
+        // NORMAL FOLLOW
+        // ========================================================
+
+        else if (
+            distance >= 3f &&
+            distance < 10f
+        )
+        {
+            if (agent != null)
+            {
+                agent.isStopped = false;
+
+                agent.speed = 2f;
+
+                agent.SetDestination(
+                    ObjectToFollow.transform.position
+                );
+            }
+
+            // C = 1 → Walk
             SetAnimation(1);
         }
-        else if (distance >= 10)
-        {
-            agent.isStopped = false;
-            agent.speed = 6;
-            agent.SetDestination(ObjectToFollow.transform.position);
 
+        // ========================================================
+        // RUN FOLLOW
+        // ========================================================
+
+        else if (distance >= 10f)
+        {
+            if (agent != null)
+            {
+                agent.isStopped = false;
+
+                agent.speed = 6f;
+
+                agent.SetDestination(
+                    ObjectToFollow.transform.position
+                );
+            }
+
+            // C = 2 → Run
             SetAnimation(2);
         }
     }
 
-    //-----------------------
-    // TAKE DAMAGE
-    //-----------------------
+    // ============================================================
+    // NPC DEATH
+    // ============================================================
 
-    public void TakeDamage(float damage)
-    {
-        // Nếu NPC đã chết thì không nhận damage nữa
-        if (isDead)
-            return;
-
-        currentHealth -= damage;
-
-        Debug.Log(
-            "NPC Take Damage: " + damage +
-            " | HP: " + currentHealth
-        );
-
-
-        // Kiểm tra chết
-        if (currentHealth <= 0)
-        {
-            currentHealth = 0;
-
-            Die();
-        }
-    }
-
-    //-----------------------
-    // DIE
-    //-----------------------
-
-    private void Die()
+    // Được HealthController gọi khi HP <= 0
+    public void DieFromHealthController()
     {
         if (isDead)
             return;
 
         isDead = true;
 
-        Debug.Log("NPC Died");
+        Debug.Log(
+            "NPC Died"
+        );
 
+        // ========================================================
+        // STOP MOVEMENT
+        // ========================================================
 
-        // Không cho NPC di chuyển
         if (agent != null)
         {
             agent.isStopped = true;
-            agent.ResetPath();
+
+            if (agent.isOnNavMesh)
+            {
+                agent.ResetPath();
+            }
+
+            agent.enabled = false;
         }
 
-        // Tắt các trạng thái
+        // ========================================================
+        // STOP NPC LOGIC
+        // ========================================================
+
         canFollow = false;
+
         isTerrified = false;
 
-        // Death Animation
+        // ========================================================
+        // DEATH ANIMATION
+        // ========================================================
+
+        // C = 4 → Death
         SetAnimation(4);
 
-        // Hiện Bad End
+        // ========================================================
+        // BAD END
+        // ========================================================
+
         if (badEndText != null)
         {
-            StartCoroutine(ShowBadEnd());
+            StartCoroutine(
+                ShowBadEnd()
+            );
         }
     }
+
+    // ============================================================
+    // BAD END TEXT
+    // ============================================================
 
     private IEnumerator ShowBadEnd()
     {
         badEndText.SetActive(true);
+
+        Debug.Log(
+            "BAD END"
+        );
 
         yield return new WaitForSeconds(2f);
 
         badEndText.SetActive(false);
     }
 
-    bool DetectZombie()
+    // ============================================================
+    // STOP NPC
+    // ============================================================
+
+    private void StopNPC()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position,detectZombieRadius);
-        //Debug.Log("Found: " + hits.Length);
+        if (agent == null)
+            return;
+
+        agent.isStopped = true;
+
+        if (agent.isOnNavMesh)
+        {
+            agent.ResetPath();
+        }
+    }
+
+    // ============================================================
+    // ZOMBIE DETECTION
+    // ============================================================
+
+    private bool DetectZombie()
+    {
+        Collider[] hits =
+            Physics.OverlapSphere(
+                transform.position,
+                detectZombieRadius
+            );
 
         foreach (Collider hit in hits)
         {
             if (hit.CompareTag("Zombie"))
+            {
                 return true;
+            }
+
+            // Trường hợp collider nằm ở child của Zombie
+            if (
+                hit.transform.root.CompareTag("Zombie")
+            )
+            {
+                return true;
+            }
         }
 
         return false;
     }
 
-    //-----------------------
+    // ============================================================
     // ANIMATION
-    //-----------------------
+    // ============================================================
 
-    void SetAnimation(int state)
+    private void SetAnimation(int state)
     {
-        animator.SetInteger("C", state);
+        if (animator == null)
+            return;
+
+        animator.SetInteger(
+            "C",
+            state
+        );
     }
 
-    //-----------------------
+    // ============================================================
     // GIZMOS
-    //-----------------------
+    // ============================================================
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, detectZombieRadius);
+
+        Gizmos.DrawWireSphere(
+            transform.position,
+            detectZombieRadius
+        );
     }
 }

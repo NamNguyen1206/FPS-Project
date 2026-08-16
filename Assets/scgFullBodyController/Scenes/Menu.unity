@@ -728,7 +728,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &132654377
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1457,12 +1457,17 @@ MonoBehaviour:
   ControllerSenSlider: {fileID: 510437000}
   defaultControllerSen: 4
   mainControllerSen: 4
+  invertYToggle: {fileID: 1147780074}
   brightnessSlider: {fileID: 1613358363}
-  brightnessTextValue: {fileID: 959826151}
-  defaultBrightness: 1
+  brightnessTextValue: {fileID: 262424982}
+  defaultBrightness: 1.25
+  postProcessVolume: {fileID: 589673920}
   qualityDropdown: {fileID: 981566388}
   fullScreenToggle: {fileID: 922811656}
-  invertYToggle: {fileID: 1147780074}
+  vfxTextValue: {fileID: 1362958311}
+  vfxSlider: {fileID: 2031692050}
+  defaultVFX: 1
+  mainVFX: 1
   comfirmationPrompt: {fileID: 999245398}
   _newGameLevels: Level1
   noSavedGameDialog: {fileID: 2032343809}
@@ -1494,7 +1499,7 @@ GameObject:
   - component: {fileID: 262424983}
   - component: {fileID: 262424982}
   m_Layer: 5
-  m_Name: SensSliderValue
+  m_Name: BrightnessValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1654,6 +1659,8 @@ MonoBehaviour:
   volumeSlider: {fileID: 2089084198}
   brightnessSlider: {fileID: 1613358363}
   brightnessTextValue: {fileID: 959826151}
+  vfxSlider: {fileID: 2031692050}
+  vfxTextValue: {fileID: 1362958311}
   qualityDropdown: {fileID: 981566388}
   fullScreenToggle: {fileID: 922811656}
   ControllerSenTextValue: {fileID: 1490795416}
@@ -3124,7 +3131,7 @@ GameObject:
   - component: {fileID: 516451557}
   - component: {fileID: 516451561}
   - component: {fileID: 516451560}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -3479,6 +3486,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 539069232}
   m_CullTransparentMesh: 1
+--- !u!1 &589673919
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 589673921}
+  - component: {fileID: 589673920}
+  m_Layer: 13
+  m_Name: GlobalPostProcess
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &589673920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 589673919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Postprocessing.Runtime::UnityEngine.Rendering.PostProcessing.PostProcessVolume
+  sharedProfile: {fileID: 11400000, guid: 1b3a4875c5612094f91fc58abdfa88a6, type: 2}
+  isGlobal: 1
+  blendDistance: 0
+  weight: 1
+  priority: 0
+--- !u!4 &589673921
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 589673919}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &612442342
 GameObject:
   m_ObjectHideFlags: 0
@@ -4637,7 +4693,7 @@ RectTransform:
   m_Father: {fileID: 766872032}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0.33333334, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: -4.7043, y: 0}
   m_SizeDelta: {x: 0.5912, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -7837,7 +7893,7 @@ GameObject:
   - component: {fileID: 1362958312}
   - component: {fileID: 1362958311}
   m_Layer: 5
-  m_Name: VolumeSliderValue
+  m_Name: VFXSliderValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8954,8 +9010,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 486882620}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.33333334, y: 0}
-  m_AnchorMax: {x: 0.33333334, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -10103,7 +10159,7 @@ MonoBehaviour:
   m_MinValue: 0.5
   m_MaxValue: 2
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 1.25
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -13897,13 +13953,13 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 259517790}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: SetVolume
-        m_Mode: 0
+        m_MethodName: SetVFX
+        m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 0
+          m_FloatArgument: 1
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
@@ -14516,3 +14572,4 @@ SceneRoots:
   - {fileID: 1765059031}
   - {fileID: 259517791}
   - {fileID: 262701876}
+  - {fileID: 589673921}

@@ -18,55 +18,7 @@ public class DoorRayCast : MonoBehaviour
             interactionUI.SetActive(false);
     }
 
-    // private void Update()
-    // {
-    //     if (Input.GetKeyDown(KeyCode.E))
-    //     {
-    //         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-
-    //         RaycastHit hit;
-
-    //         if (Physics.Raycast(ray,out hit,interactDistance))
-    //         {
-    //             Debug.Log("Hit: " + hit.collider.name);
-    //             DoorController door = hit.collider.GetComponentInParent<DoorController>();
-    //             MystoryBox mysteryBox = hit.collider.GetComponentInParent<MystoryBox>();
-    //             ArmorPickup armor = hit.collider.GetComponentInParent<ArmorPickup>();
-
-    //             if (door != null)
-    //             {
-    //                 if (inventory != null &&
-    //                     inventory.hasKey)
-    //                 {
-    //                     door.Interact();
-    //                 }
-    //                 else
-    //                 {
-    //                     Debug.Log("Door Locked - Need Hangar Key");
-    //                 }
-    //             }
-    //             else if (mysteryBox != null)
-    //             {
-    //                 Debug.Log("MystoryBox found: " + mysteryBox.name);
-    //                 mysteryBox.Interact();
-    //             }
-    //             else if (armor != null)
-    //             {
-    //                 Debug.Log("Armor found: " + armor.name);
-    //                 armor.Interact();
-    //             }
-    //             else
-    //             {
-    //                 Debug.Log("No interactable found on hit object");
-    //             }
-    //         }
-    //         else
-    //         {
-    //             Debug.Log("Raycast missed");
-    //         }
-    //     }
-    // }
-        private void Update()
+    private void Update()
     {
         currentArmor = null;
 
@@ -81,95 +33,181 @@ public class DoorRayCast : MonoBehaviour
             GrenadePickup grenade = hit.collider.GetComponentInParent<GrenadePickup>();
             KeyPickup key = hit.collider.GetComponentInParent<KeyPickup>();
             SyringePickup syringe = hit.collider.GetComponentInParent<SyringePickup>();
+            NPCDialogue npc = hit.collider.GetComponentInParent<NPCDialogue>();
 
             // ===== HIỆN UI CHO ARMOR =====
-            if (armor != null)
+
+            // =========================
+            // DOOR
+            // =========================
+
+            if (door != null)
+            {
+                if (inventory != null && inventory.hasKey)
+                {
+                    // Có key
+                    ShowInteractionText("[E] Open Door");
+                }
+                else
+                {
+                    // Không có key
+                    ShowInteractionText("Need to find the key");
+                }
+            }
+
+            // =========================
+            // ARMOR
+            // =========================
+
+            else if (armor != null)
             {
                 currentArmor = armor;
 
-                if (interactionUI != null)
-                    interactionUI.SetActive(true);
-                if (interactionText != null)
-                    interactionText.text = "[E] Pick Up Armor";
+                ShowInteractionText("[E] Pick Up Armor");
             }
+
+            // =========================
+            // GRENADE
+            // =========================
+
             else if (grenade != null)
             {
-                if (interactionUI != null)
-                    interactionUI.SetActive(true);
-                if (interactionText != null)
-                    interactionText.text = "[E] Pick Up Grenade";
+                ShowInteractionText("[E] Pick Up Grenade");
             }
+
+            // =========================
+            // KEY
+            // =========================
+
             else if (key != null)
             {
-                if (interactionUI != null)
-                    interactionUI.SetActive(true);
-
-                if (interactionText != null)
-                    interactionText.text = "[E] Pick Up Key";
+                ShowInteractionText("[E] Pick Up Key");
             }
+
+            // =========================
+            // SYRINGE
+            // =========================
+
             else if (syringe != null)
             {
-                if (interactionUI != null)
-                    interactionUI.SetActive(true);
-
-                if (interactionText != null)
-                    interactionText.text = "[E] Pick Up Syringe";
+                ShowInteractionText("[E] Pick Up Syringe");
             }
+
+            // =========================
+            // NPC
+            // =========================
+
+            else if (npc != null)
+            {
+                // Nếu NPC chưa nói chuyện
+                if (!npc.IsTalking)
+                {
+                    ShowInteractionText("[E] to talk to NPC");
+                }
+                else
+                {
+                    // Đang dialogue -> không hiện interaction UI
+                    HideInteractionUI();
+                }
+            }
+
+            // =========================
+            // NOTHING
+            // =========================
+
             else
             {
-                currentArmor = null;
-                if (interactionUI != null)
-                    interactionUI.SetActive(false);
+                HideInteractionUI();
             }
 
             // ===== NHẤN E ĐỂ TƯƠNG TÁC =====
+
             if (Input.GetKeyDown(KeyCode.E))
             {
+                // DOOR
                 if (door != null)
                 {
                     if (inventory != null && inventory.hasKey)
+                    {
                         door.Interact();
+
+                        HideInteractionUI();
+                    }
                     else
-                        Debug.Log("Door Locked - Need Hangar Key");
+                    {
+                        Debug.Log("Door Locked - Need Key");
+                    }
                 }
+
+                // MYSTERY BOX
                 else if (mysteryBox != null)
                 {
                     mysteryBox.Interact();
+
+                    HideInteractionUI();
                 }
+
+                // ARMOR
                 else if (currentArmor != null)
                 {
                     currentArmor.Interact();
 
-                    if (interactionUI != null)
-                        interactionUI.SetActive(false);
+                    HideInteractionUI();
                 }
+
+                // GRENADE
                 else if (grenade != null)
                 {
                     grenade.Interact();
 
-                    if (interactionUI != null)
-                        interactionUI.SetActive(false);
+                    HideInteractionUI();
                 }
+
+                // KEY
                 else if (key != null)
                 {
                     key.Interact();
 
-                    if (interactionUI != null)
-                        interactionUI.SetActive(false);
+                    HideInteractionUI();
                 }
+
+                // SYRINGE
                 else if (syringe != null)
                 {
                     syringe.Interact();
 
-                    if (interactionUI != null)
-                        interactionUI.SetActive(false);
+                    HideInteractionUI();
+                }
+
+                // NPC
+                else if (npc != null)
+                {
+                    npc.NPCInteract();
+
+                    // Ẩn "[E] to talk to NPC"
+                    HideInteractionUI();
                 }
             }
         }
         else
         {
-            if (interactionUI != null)
-                interactionUI.SetActive(false);
+            HideInteractionUI();
         }
+    }
+    private void ShowInteractionText(string text)
+    {
+        if (interactionUI != null)
+            interactionUI.SetActive(true);
+
+        if (interactionText != null)
+            interactionText.text = text;
+    }
+
+    private void HideInteractionUI()
+    {
+        currentArmor = null;
+
+        if (interactionUI != null)
+            interactionUI.SetActive(false);
     }
 }
